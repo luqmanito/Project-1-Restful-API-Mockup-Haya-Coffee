@@ -1,7 +1,17 @@
 const express = require("express");
 
 const productsRouter = express.Router();
-const { get, add, edit, drop } = require("../controllers/products");
+const {
+  get,
+  add,
+  edit,
+  drop,
+  search,
+  sortSold,
+  sortNewest,
+  sortPrice,
+  filter
+} = require("../controllers/products");
 
 productsRouter.get("/all", get);
 
@@ -13,6 +23,12 @@ productsRouter.post("/add", add);
 productsRouter.patch("/modify/:id", edit);
 
 productsRouter.delete("/del/:id", drop);
+
+productsRouter.get("/search", search);
+productsRouter.get("/sortsold", sortSold);
+productsRouter.get("/sortprice", sortPrice);
+productsRouter.get("/sortnewest", sortNewest);
+productsRouter.get("/filter", filter);
 
 module.exports = productsRouter;
 
