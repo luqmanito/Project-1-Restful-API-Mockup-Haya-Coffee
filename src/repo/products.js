@@ -1,12 +1,103 @@
 // const { query } = require("express");
 const postgreDb = require("../config/postgre");
 //
-const getProducts = () => {
+// const getProducts = () => {
+//   return new Promise((resolve, reject) => {
+//     const query = "select id, name, price from products";
+//     postgreDb.query(query, (err, result) => {
+//       if (err) {
+//         console.error(err);
+//         return reject(err);
+//       }
+//       return resolve(result);
+//     });
+//   });
+// };
+
+// const getProducts = (queryParams) => {
+//   return new Promise((resolve, reject) => {
+//     let query = `select * from products`;
+//     if (queryParams.keyword) {
+//       query += ` where lower(name) like lower('%${queryParams.keyword}%')`;
+//     }
+//     if (queryParams.filter) {
+//       if (queryParams.keyword) {
+//         query += `and lower(category) like lower('%${queryParams.filter}%')`;
+//       } else {
+//         query += `where lower(category) like lower ('%${queryParams.filter}')`;
+//       }
+//     }
+//     if (queryParams.sort == "oldest") {
+//       query += `order by created_at asc`;
+//     }
+//     if (queryParams.sort == "newest") {
+//       query += `order by created_at desc`;
+//     }
+//     if (queryParams.sort == "less popular") {
+//       query += `order by sold asc`;
+//     }
+//     if (queryParams.sort == "most popular") {
+//       query += `order by sold desc`;
+//     }
+//     if (queryParams.sort == "cheapest") {
+//       query += `order by price asc `;
+//     }
+//     if (queryParams.sort == "most expensive") {
+//       query += `order by price desc `;
+//     }
+
+//     const page = Number(queryParams.page)
+//     const limit = Number(queryParams.limit)
+//     const offset = (page-1) * limit
+//     query +=
+
+//     postgreDb.query(query, (err, result) => {
+//       if (err) {
+//         console.log(err);
+//         return reject(err);
+//       }
+//       return resolve(result);
+//     });
+//   });
+// };
+
+const getProducts = (queryParams) => {
   return new Promise((resolve, reject) => {
-    const query = "select id, name, price from products";
-    postgreDb.query(query, (err, result) => {
-      if (err) {  
-        console.error(err);
+    // const bookSchema = {
+    //   table: "books",
+    //   alias: "b",
+    //   column: {
+    //     id: "number",
+    //     title: "string",
+    //     author: "string",
+    //     publisher: "string",
+    //     genre: "string",
+    //     published_date: "date",
+    //   },
+    // };
+    // asumsi query params selalu berisi title dan author
+    let query = "select name, category, price, quantity, sold from products p ";
+    const values = [];
+    const whereParams = Object.keys(queryParams).filter((key) =>
+      ["name", "category"].includes(key)
+    );
+    if (whereParams.length > 0) query += "where ";
+    whereParams.forEach((key) => {
+      if (values.length > 0) query += "and ";
+      query += `lower(p.${key}) like lower('%' || $${
+        values.length + 1
+      } || '%') `;
+      values.push(String(queryParams[key]));
+    });
+    // paginasi biasanya diwakili dengan query page dan limit
+    const page = Number(queryParams.page);
+    const limit = Number(queryParams.limit);
+    const offset = (page - 1) * limit;
+    query += `limit $${values.length + 1} offset $${values.length + 2}`;
+    values.push(limit, offset);
+    postgreDb.query(query, values, (err, result) => {
+      if (err) {
+        console.log(err);
         return reject(err);
       }
       return resolve(result);
@@ -17,12 +108,13 @@ const getProducts = () => {
 const addProducts = (body) => {
   return new Promise((resolve, reject) => {
     const query =
-      "insert into products (id, name, category, price, quantity) values ($1,$2,$3,$4,$5)";
+      "insert into products (name, category, image, price, quantity, sold) values ($1,$2,$3,$4,$5,$6)";
     //cr parsing body pake req.body, didestructuring spy lbh simpel
-    const { id, name, category, price, quantity } = body;
+    const { name, category, price, quantity, sold } = body;
+    const imageUrl = `/images/${file.filename}`;
     postgreDb.query(
       query,
-      [id, name, category, price, quantity],
+      [name, category, imageUrl, price, quantity, sold],
       (err, response) => {
         // pake cb async
         if (err) {
@@ -68,7 +160,7 @@ const dropProducts = (params) => {
 const searchProducts = (queryParams) => {
   return new Promise((resolve, reject) => {
     const query = `select * from products where lower(name) like lower($1)`;
-    const values = [`%${queryParams.name}%`]
+    const values = [`%${queryParams.name}%`];
     postgreDb.query(query, values, (err, result) => {
       if (err) {
         console.error(err);
@@ -82,7 +174,8 @@ const searchProducts = (queryParams) => {
 const sortProductsSold = () => {
   return new Promise((resolve, reject) => {
     const query =
-      "select id, name, price, category, sold from products order by sold asc";
+      "select id, name, price, category, sold from products order by sold desc";
+
     postgreDb.query(query, (err, result) => {
       if (err) {
         console.error(err);
@@ -96,7 +189,7 @@ const sortProductsSold = () => {
 const sortProductsPrice = () => {
   return new Promise((resolve, reject) => {
     const query =
-      "select id, name, price, category, sold from products order by price desc";
+      "select id, name, price, category, sold from products order by price asc";
     postgreDb.query(query, (err, result) => {
       if (err) {
         console.error(err);
@@ -122,18 +215,17 @@ const sortProductsNewest = () => {
 };
 
 const filterProducts = () => {
-    return new Promise((resolve, reject) => {
-      const query =
-      `select id, name, price, category from products where "category" = 'non coffee'`;
-      postgreDb.query(query, (err, result) => {
-        if (err) {
-          console.error(err);
-          return reject(err);
-        }
-        return resolve(result);
-      });
+  return new Promise((resolve, reject) => {
+    const query = `select id, name, price, category from products where "category" = 'non coffee'`;
+    postgreDb.query(query, (err, result) => {
+      if (err) {
+        console.error(err);
+        return reject(err);
+      }
+      return resolve(result);
     });
-  };
+  });
+};
 
 //
 const productsRepo = {
@@ -145,7 +237,7 @@ const productsRepo = {
   sortProductsSold,
   filterProducts,
   sortProductsPrice,
-  sortProductsNewest
+  sortProductsNewest,
 };
 
 module.exports = productsRepo;

@@ -9,6 +9,7 @@ const {
   search,
   sort,
   filter,
+  editPass,
 } = require("../controllers/users");
 
 usersRouter.get("/all", get);
@@ -18,5 +19,7 @@ usersRouter.delete("/del/:id", drop);
 usersRouter.get("/search", search);
 usersRouter.get("/sort", sort);
 usersRouter.get("/filter", filter);
+usersRouter.patch("/edit_pass", editPass);
+
 
 module.exports = usersRouter;

@@ -18,7 +18,7 @@ const add = async (req, res) => {
   try {
     const response = await transactionsRepo.addTransactions(req.body);
     res.status(201).json({
-      result: response,
+      msg : `Insert Succesfully`,
     });
   } catch (err) {
     res.status(500).json({ msg: `internal server error` });
@@ -28,7 +28,9 @@ const add = async (req, res) => {
 const edit = async (req, res) => {
   try {
     const response = await transactionsRepo.editTransactions(req.body, req.params);
-    res.status(200).json({ result: response });
+    res.status(200).json({ 
+      msg : `Edit Succesfully`, 
+    });
   } catch (err) {
     res.status(500).json({ msg: "internal server error" });
   }
@@ -37,7 +39,9 @@ const edit = async (req, res) => {
 const drop = async (req, res) => {
   try {
     const result = await transactionsRepo.dropTransactions(req.params);
-    res.status(200).json({ result });
+    res.status(200).json({ 
+      msg : `Delete Succesfully`,
+    });
   } catch (err) {
     res.status(500).json({ msg: "Internal Server Error" });
   }
