@@ -1,7 +1,7 @@
 # Haya-Coffee Backend Description
 
-Haya-Coffee is a simple service website, for food and beverage, user can simply register, login, see product [project](##Related)
-[![nodejs](https://nodejs.org/static/images/logo.svg)](https://nodejs.org/en/)
+Haya-Coffee is a simple service website, for food and beverage, user can simply register, login.
+![nodejs](https://nodejs.org/en/)
 [![dotenv](https://img.shields.io/badge/dotenv-16.0.3-blue)](https://www.npmjs.com/package/dotenv)
 [![express](https://img.shields.io/badge/express-4.18.1-blue)](https://www.npmjs.com/package/express)
 [![bcrypt](https://img.shields.io/badge/bcrypt-5.0.1-blue)](https://www.npmjs.com/package/bcrypt)
