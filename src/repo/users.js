@@ -14,13 +14,31 @@ const getUsers = () => {
   });
 };
 
+const getUsersId = (queryParams) => {
+  return new Promise((resolve, reject) => {
+    
+    const query = "select * from users where id = $1";
+    postgreDb.query(query, [queryParams.id], (err, result) => {
+      console.log(query);
+      if (err) {
+        console.log(query);
+        console.error(err);
+        return reject(err);
+      }
+      return resolve(result);
+    });
+  });
+};
+
 const addUsers = (body) => {
   return new Promise((resolve, reject) => {
     const { name, password, mobile_number, email, address, gender, birth_date } = body;
-    const emailValidation = `select email from users where email like $1`;
-    postgreDb.query(emailValidation, [email], (err, resEmail) => {
-      if (err) return reject({err});
-      if (resEmail.rows.length > 0) {
+    const emailValidation = `select email from users where email like $1 or mobile_number like $2`;
+    postgreDb.query(emailValidation,  [email, mobile_number], (err, resEmail) => {
+      
+      if (err) 
+      return reject({err});
+      if (resEmail.rows.length > 0 ) {
         return reject(err);
       }
       bcrypt.hash(password, 10, (err, hashedPassword) => {
@@ -43,84 +61,15 @@ const addUsers = (body) => {
   });
 };
 
-
-// const adddUsers = (body) => {
-//   return new Promise((resolve, reject) => {
-//     const queryAdd =
-//       "insert into Users (name, password, mobile_number, email, address, gender, birth_date) values ($1,$2,$3,$4,$5,$6,$7)";
-//     const queryCheckPhoneAndMail =
-//       "select email from users u where email like $1";
-
-//     //cr parsing body pake req.body, didestructuring spy lbh simpel
-//     const {
-//       name,
-//       password,
-//       mobile_number,
-//       email,
-//       address,
-//       gender,
-//       birth_date,
-//     } = body;
-
-//     postgreDb.query(
-//       queryCheckPhoneAndMail,
-//       [mobile_number, email],
-//       (err, result) => {
-//         if (err) {
-//           console.error(err);
-//           return reject({ err });
-//         }
-
-//         if (result.rows.length > 0) {
-//           let errMsg = {};
-//         if (
-//           result.rows.email === email
-//         ) {
-//           errMsg.push("email already exist!");
-//           console.error(err);
-//           return reject(errMsg);
-//         }
-//         }
-//         bcrypt.hash(password, 10, (err, hashedpw) => {
-//           if (err) {
-//             console.error(err);
-//             return reject(err);
-//           }
-//           const values = [
-//             name,
-//             hashedpw,
-//             mobile_number,
-//             email,
-//             address,
-//             gender,
-//             birth_date,
-//           ];
-//           postgreDb.query(queryAdd, values, (err, result) => {
-//             if (err) {
-//               console.error(err);
-//               return reject(err);
-//             }
-//             return resolve(result);
-//           });
-//         });
-//       }
-
-//     );
-
-    
-//   });
-// };
-
-
-
-
-const editUsers = (body, params) => {
+const editUsers = (body, queryParams) => {
   return new Promise((resolve, reject) => {
-    const query = "update users set address = $1 where id = $2";
+    const query = "update users set address = $1, name = $2, mobile_number = $3, email = $4, gender = $5, birth_date = $6, firstname = $7, lastname = $8  where id = $9";
 
     postgreDb
-      .query(query, [body.address, params.id])
+      .query(query, [body.address, body.name, body.mobile_number, body.email, body.gender, body.birth_date, body.firstname, body.lastname, queryParams.id])
+      
       .then((response) => {
+        console.log(query);
         resolve(response);
       })
       .catch((err) => {
@@ -182,7 +131,7 @@ const filterUsers = () => {
     });
   });
 };
-//editpassword
+
 const editPassUsers = (body) => {
   return new Promise((resolve, reject) => {
     const { old_password, new_password, user_id } = body;
@@ -224,7 +173,6 @@ const editPassUsers = (body) => {
   });
 };
 
-//
 const usersRepo = {
   getUsers,
   addUsers,
@@ -234,6 +182,7 @@ const usersRepo = {
   sortUsers,
   filterUsers,
   editPassUsers,
+  getUsersId
 };
 
 module.exports = usersRepo;

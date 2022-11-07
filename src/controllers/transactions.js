@@ -1,7 +1,6 @@
 const transactionsRepo = require("../repo/transactions");
 
 const get = async (req, res) => {
-  // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
   try {
     const response = await transactionsRepo.getTransactions();
     res.status(200).json({
@@ -48,7 +47,6 @@ const drop = async (req, res) => {
 };
 
 const search = async (req, res) => {
-  // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
   try {
     const response = await transactionsRepo.searchTransactions(req.query);
     res.status(200).json({
@@ -62,7 +60,6 @@ const search = async (req, res) => {
 };
 
 const sort = async (req, res) => {
-  // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
   try {
     const response = await transactionsRepo.sortTransactions();
     res.status(200).json({
@@ -76,7 +73,6 @@ const sort = async (req, res) => {
 };
 
 const filter = async (req, res) => {
-    // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
     try {
       const response = await transactionsRepo.filterTransactions();
       res.status(200).json({

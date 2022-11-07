@@ -13,7 +13,7 @@ const {
 
 promosRouter.get("/all", get);
 promosRouter.post("/add", add);
-promosRouter.patch("/modify/:id", edit);
+promosRouter.patch("/modify/", edit);
 promosRouter.delete("/del/:id", drop);
 promosRouter.get("/search", search);
 promosRouter.get("/sort", sort);

@@ -10,11 +10,13 @@ const {
   sort,
   filter,
   editPass,
+  getUserById
 } = require("../controllers/users");
 
 usersRouter.get("/all", get);
+usersRouter.get("/profile/", getUserById);
 usersRouter.post("/add", add);
-usersRouter.patch("/modify/:id", edit);
+usersRouter.patch("/modify/", edit);
 usersRouter.delete("/del/:id", drop);
 usersRouter.get("/search", search);
 usersRouter.get("/sort", sort);

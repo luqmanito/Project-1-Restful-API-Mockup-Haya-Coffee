@@ -1,8 +1,9 @@
 const postgreDb = require("../config/postgre");
 //
-const getTransactions= () => {
+const getTransactions = () => {
   return new Promise((resolve, reject) => {
-    const query = "select order_id, status, quantity_ordered, product_code, order_date from transactions";
+    const query =
+      "select order_id, status, quantity_ordered, product_code, order_date from transactions";
     postgreDb.query(query, (err, result) => {
       if (err) {
         console.error(err);
@@ -13,17 +14,16 @@ const getTransactions= () => {
   });
 };
 
-const addTransactions= (body) => {
+const addTransactions = (body) => {
   return new Promise((resolve, reject) => {
     const query =
       "insert into transactions (order_id, status, quantity_ordered, product_code, order_date) values ($1,$2,$3,$4,$5)";
-    //cr parsing body pake req.body, didestructuring spy lbh simpel
-    const { order_id, status, quantity_ordered, product_code, order_date } = body;
+    const { order_id, status, quantity_ordered, product_code, order_date } =
+      body;
     postgreDb.query(
       query,
       [order_id, status, quantity_ordered, product_code, order_date],
       (err, response) => {
-        // pake cb async
         if (err) {
           console.log(err);
           return reject(err);
@@ -35,7 +35,7 @@ const addTransactions= (body) => {
   });
 };
 
-const editTransactions= (body, params) => {
+const editTransactions = (body, params) => {
   return new Promise((resolve, reject) => {
     const query = "update transactions set status = $1 where order_id = $2";
 
@@ -51,7 +51,7 @@ const editTransactions= (body, params) => {
   });
 };
 
-const dropTransactions= (params) => {
+const dropTransactions = (params) => {
   return new Promise((resolve, reject) => {
     const query = "delete from transactions where order_id = $1";
     postgreDb.query(query, [params.order_id], (err, result) => {
@@ -64,10 +64,10 @@ const dropTransactions= (params) => {
   });
 };
 
-const searchTransactions= (queryParams) => {
+const searchTransactions = (queryParams) => {
   return new Promise((resolve, reject) => {
     const query = `select * from transactions where lower(status) like lower($1)`;
-    const values = [`%${queryParams.status}%`]
+    const values = [`%${queryParams.status}%`];
     postgreDb.query(query, values, (err, result) => {
       if (err) {
         console.error(err);
@@ -78,7 +78,7 @@ const searchTransactions= (queryParams) => {
   });
 };
 
-const sortTransactions= () => {
+const sortTransactions = () => {
   return new Promise((resolve, reject) => {
     const query =
       "select order_id, status, quantity_ordered, product_code, order_date from transactions order by order_date asc";
@@ -92,19 +92,18 @@ const sortTransactions= () => {
   });
 };
 
-const filterTransactions= () => {
-    return new Promise((resolve, reject) => {
-      const query =
-      `select * from transactions where "product_code" = 'p01x'`;
-      postgreDb.query(query, (err, result) => {
-        if (err) {
-          console.error(err);
-          return reject(err);
-        }
-        return resolve(result);
-      });
+const filterTransactions = () => {
+  return new Promise((resolve, reject) => {
+    const query = `select * from transactions where "product_code" = 'p01x'`;
+    postgreDb.query(query, (err, result) => {
+      if (err) {
+        console.error(err);
+        return reject(err);
+      }
+      return resolve(result);
     });
-  };
+  });
+};
 
 //
 const transactionsRepo = {
@@ -114,7 +113,7 @@ const transactionsRepo = {
   dropTransactions,
   searchTransactions,
   sortTransactions,
-  filterTransactions
+  filterTransactions,
 };
 
 module.exports = transactionsRepo;
