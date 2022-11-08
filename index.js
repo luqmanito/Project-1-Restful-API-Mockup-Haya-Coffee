@@ -5,19 +5,26 @@ const mainRouter = require("./src/routes/main");
 const server = express();
 const PORT = 8070;
 const morgan = require("morgan")
+const cors = require("cors");
+server.use(cors());
 
-// console.log(process.env.SECRET_API_KEY)
+
+const corsOptions = {
+  origin: "*",
+};
 
 postgreDb
   .connect()
   .then(() => {
     console.log("DB is connected");
+    server.use(cors(corsOptions));
 
     server.use(express.static("./uploads"));
 
     // pasang parser u/ body spy bisa create/post scr dinamis
     server.use(express.json()); //krn kita mau pk json, jd .json, kl urlencode pake .urlencode
     server.use(express.urlencoded({ extended: false }));
+  
     //true = parsing pk qs bisa nested object
     //false = parsing pk querystring tdk bs nested object
     server.use(morgan(':method :url :status :res[content-length] - :response-time ms'))

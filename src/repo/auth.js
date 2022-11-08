@@ -9,7 +9,7 @@ const login = (body) => {
     const { email, password } = body;
     // cek apa ada email yg diinput di db
     const getPasswordByEmailQuery =
-      "select id, name, password from users where email = $1";
+      "select id, name, password, role from users where email = $1";
     const getPasswordByEmailValues = [email];
     postgreDb.query(
       getPasswordByEmailQuery,
@@ -40,17 +40,23 @@ const login = (body) => {
             const payload = {
                 user_id: response.rows[0].id,
                 name: response.rows[0].name,
-                email
+                email,
+                role : response.rows[0].role
             }
             jwt.sign(payload, process.env.secret_key,{
-                expiresIn: "5m",
+                expiresIn: "15m",
                 issuer: process.env.issuer,
             }, (err, token)=> {
                 if (err) {
                     console.error(err);
                     return reject({err})
                 }
-                return resolve({token, name: payload.name})
+                return resolve({token, 
+                  name: payload.name, 
+                  id: payload.user_id,
+                  role: payload.role
+                
+                })
             })
         });
       }

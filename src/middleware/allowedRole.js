@@ -1,17 +1,16 @@
-// misal ingin hanya role tertentu yg bisa create product (diperbolehkan)
-
-// module.exports = (...allowedRole) => {
-//     return (req, res, next) => {
-//         const payload = req.userPayload
-//         let isAllowedRole = false
-//         for (let role of allowedRole) {
-//             if (role !== payload.role) continue 
-//             isAllowedRole = true
-//             break
-//         }
-//         if(!isAllowedRole) return res.status(403).json({
-//             msg: "Forbidden", data: null
-//         })
-//         next()
-//     }
-// }
+const allowedRoles = (...allowed) => {
+    return (req, res, next) => {
+      const role = req.userPayload.role
+      // console.log(req.userPayload);
+      let isAllowed = false;
+      for (let allowedRole of allowed) {
+        if (allowedRole !== role) continue;
+        isAllowed = true;
+        break;
+      }
+      if (!isAllowed) return res.status(403).json({ msg: "Access Denied" });
+      next();
+    };
+  };
+  module.exports = allowedRoles;
+  

@@ -1,6 +1,4 @@
-// const { query } = require("express");
 const postgreDb = require("../config/postgre");
-//
 const getPromos= () => {
   return new Promise((resolve, reject) => {
     const query = "select id, discount, free_delivery, valid_until from promos";
@@ -17,18 +15,17 @@ const getPromos= () => {
 const addPromos= (body) => {
   return new Promise((resolve, reject) => {
     const query =
-      "insert into promos (id, discount, free_delivery, valid_until) values ($1,$2,$3,$4)";
-    //cr parsing body pake req.body, didestructuring spy lbh simpel
-    const { id, discount, free_delivery, valid_until } = body;
+      "insert into promos (name, price, description) values ($1,$2,$3)";
+    const { name, price, description } = body;
     postgreDb.query(
       query,
-      [id, discount, free_delivery, valid_until],
+      [name, price, description],
       (err, response) => {
-        // pake cb async
         if (err) {
           console.log(err);
           return reject(err);
         } else {
+          console.log(query);
           resolve(response);
         }
       }
@@ -36,12 +33,12 @@ const addPromos= (body) => {
   });
 };
 
-const editPromos= (body, params) => {
+const editPromos= (body, queryParams) => {
   return new Promise((resolve, reject) => {
-    const query = "update promos set discount = $1 where id = $2";
+    const query = "update promos set name = $1, price = $2, description = $3 where id = $4";
 
     postgreDb
-      .query(query, [body.discount, params.id])
+      .query(query, [body.name, body.price, body.description, queryParams.id])
       .then((response) => {
         resolve(response);
       })

@@ -1,8 +1,7 @@
-const { response } = require("express");
+const { response, query } = require("express");
 const usersRepo = require("../repo/users");
 
 const get = async (req, res) => {
-  // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
   try {
     const response = await usersRepo.getUsers();
     res.status(200).json({
@@ -15,37 +14,37 @@ const get = async (req, res) => {
   }
 };
 
-// const add = async (req, res) => {
-//   try {
-//     const response = await usersRepo.addUsers(req.body);
-//     res.status(201).json({
-//       msg : `Insert Succesfully`,
-//     });
-//   } catch (err) {
-//     res.status(500).json({ msg: `internal server error` });
-//   }
-// };
+const getUserById = async (req, res) => {
+  try {
+    const response = await usersRepo.getUsersId(req.query);
+    res.status(200).json({
+      result: response.rows
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      msg: "internal server error",
+    });
+  }
+};
+
 
 const add = async (req, res) => {
-  // const result = await usersRepo.addUsers(req.body);
-  // res.status(200).json({
-  //   result : "as"
-  // });
-  // res.status(result.statusCode).send(result);
   try {
     const result = await usersRepo.addUsers(req.body);
     res.status(200).json({ 
       msg : `Register Succesfully`,
     });
   } catch (err) {
-    res.status(500).json({ msg: "Email already exist" });
+    console.log(err);
+    res.status(500).json({ msg: "Email or phone already exist" });
   }
 };
 
 
 const edit = async (req, res) => {
   try {
-    const response = await usersRepo.editUsers(req.body, req.params);
+    const response = await usersRepo.editUsers(req.body, req.query);
     res.status(200).json({ 
       msg : `Edit Succesfully`,
     });
@@ -66,7 +65,6 @@ const drop = async (req, res) => {
 };
 
 const search = async (req, res) => {
-  // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
   try {
     const response = await usersRepo.searchUsers(req.query);
     res.status(200).json({
@@ -80,7 +78,6 @@ const search = async (req, res) => {
 };
 
 const sort = async (req, res) => {
-  // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
   try {
     const response = await usersRepo.sortUsers();
     res.status(200).json({
@@ -94,7 +91,6 @@ const sort = async (req, res) => {
 };
 
 const filter = async (req, res) => {
-    // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
     try {
       const response = await usersRepo.filterUsers();
       res.status(200).json({
@@ -122,25 +118,6 @@ const editPass = (req, res) => {
   })
 }
 
-// const register = async (req, res) => {
-//   try {
-//     const response = await usersRepo.regUsers(req.body);
-//     res.status(201).json({
-//       msg: `register success`,
-//       data: {
-//         ...response.rows,
-//         email: body.email,
-//         name: body.name
-//       }
-//     });
-//   } catch (err) {
-//     res.status(500).json({
-//       msg: "internal server error",
-//     });
-//   }
-// }
-
-
 const usersController = {
   get,
   add,
@@ -149,7 +126,8 @@ const usersController = {
   search,
   sort,
   filter,
-  editPass
+  editPass,
+  getUserById
 };
 
 module.exports = usersController;

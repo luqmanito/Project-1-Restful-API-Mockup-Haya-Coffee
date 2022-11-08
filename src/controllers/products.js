@@ -1,58 +1,92 @@
 const productsRepo = require("../repo/products");
-const sendResponse = require("../helpers/response")
-
-// const get = async (req, res) => {
-//   // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
-//   try {
-//     const response = await productsRepo.getProducts(req.query);
-//     res.status(200).json({
-//       result: response.rows,
-//     });
-//   } catch (err) {
-//     res.status(500).json({
-//       msg: "internal server error",
-//     });
-//   }
-// };
+// const sendResponse = require("../helpers/response");
 
 const get = async (req, res) => {
-  // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
   try {
     const response = await productsRepo.getProducts(req.query);
-    // res.status(200).json({
-    //   result: response.rows,
-      // query : response.query,
-      // values: response.values,
-    // });
-    sendResponse.success(res, 200, response.rows);
+
+
+    if (req.query.page &&  req.query.limit) {
+      if (req.query.page < 2) {
+        nextPages = req.originalUrl.replace(
+          /\=(\d+)\&/,
+          function (match, number) {
+            return "=" + (parseInt(number, 10) + 1) + "&";
+          }
+        );
+        let nextUrl = req.protocol + "://" + req.get("host") + nextPages;
+        res.status(200).json({
+          result: response.rows,
+          per_page : req.query.limit,
+          current_page : req.query.page,
+          nextPage: nextUrl,
+          // totalData: totalPage
+        });
+      }
+
+      if (req.query.page > 1) {
+        nextPages = req.originalUrl.replace(
+          /\=(\d+)\&/,
+          function (match, number) {
+            return "=" + (parseInt(number, 10) + 1) + "&";
+          }
+        );
+
+        prevPages = req.originalUrl.replace(
+          /\=(\d+)\&/,
+          function (match, number) {
+            return "=" + (parseInt(number, 10) - 1) + "&";
+          }
+        );
+        let nextUrl = req.protocol + "://" + req.get("host") + nextPages;
+        let prevUrl = req.protocol + "://" + req.get("host") + prevPages;
+
+        res.status(200).json({
+          result: response.rows,
+          per_page : req.query.limit,
+          current_page : req.query.page,
+          nextPage: nextUrl,
+          prevPage: prevUrl,
+        });
+      }
+    }
+
   } catch (err) {
-    // res.status(500).json({
-    //   msg: "internal server error",
-    // });
-    sendResponse.error(res, 500, "Internal Server Error");
+    console.log(err);
+    res.status(500).json({
+      msg: "internal server error",
+    });
   }
 };
 
 const add = async (req, res) => {
   try {
     console.log(req.body);
-    const response = await productsRepo.addProducts(req.body);
+    const response = await productsRepo.addProducts(req.body, req.file);
     res.status(201).json({
-      msg : `Insert Succesfully`,
-      
+      msg: `${req.body.name} has been added to product list`,
     });
   } catch (err) {
-    res.status(500).json({ msg: `internal server error` });
+    console.log(err);
+
+    res.status(500).json({
+      msg: `all fields are required`,
+    });
   }
 };
 
 const edit = async (req, res) => {
   try {
-    const response = await productsRepo.editProducts(req.body, req.params);
-    res.status(200).json({ 
-      msg : `Edit Succesfully`,
-       });
+    const response = await productsRepo.editProducts(
+      req.body,
+      req.params,
+      req.file
+    );
+    res.status(200).json({
+      msg: `Data with ID number ${req.params.id} has been edited`,
+    });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ msg: "internal server error" });
   }
 };
@@ -60,94 +94,19 @@ const edit = async (req, res) => {
 const drop = async (req, res) => {
   try {
     const result = await productsRepo.dropProducts(req.params);
-    res.status(200).json({ 
-      msg : `Delete Succesfully`,
-      });
+    res.status(200).json({
+      msg: `Product with ID number ${req.params.id} has been deleted`,
+    });
   } catch (err) {
     res.status(500).json({ msg: "Internal Server Error" });
   }
 };
-
-const search = async (req, res) => {
-  // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
-  try {
-    const response = await productsRepo.searchProducts(req.query);
-    res.status(200).json({
-      "Search Result": response.rows,
-    });
-  } catch (err) {
-    res.status(500).json({
-      msg: "internal server error",
-    });
-  }
-};
-
-const sortSold = async (req, res) => {
-  // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
-  try {
-    const response = await productsRepo.sortProductsSold();
-    res.status(200).json({
-      "Sort Result": response.rows,
-    });
-  } catch (err) {
-    res.status(500).json({
-      msg: "internal server error",
-    });
-  }
-};
-
-const sortPrice = async (req, res) => {
-  // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
-  try {
-    const response = await productsRepo.sortProductsPrice();
-    res.status(200).json({
-      "Sort Result": response.rows,
-    });
-  } catch (err) {
-    res.status(500).json({
-      msg: "internal server error",
-    });
-  }
-};
-
-const sortNewest = async (req, res) => {
-  // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
-  try {
-    const response = await productsRepo.sortProductsNewest();
-    res.status(200).json({
-      "Sort Result": response.rows,
-    });
-  } catch (err) {
-    res.status(500).json({
-      msg: "internal server error",
-    });
-  }
-};
-
-const filter = async (req, res) => {
-    // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
-    try {
-      const response = await productsRepo.filterProducts();
-      res.status(200).json({
-        "Filter Result": response.rows,
-      });
-    } catch (err) {
-      res.status(500).json({
-        msg: "internal server error",
-      });
-    }
-  };
 
 const productsController = {
   get,
   add,
   edit,
   drop,
-  search,
-  sortSold,
-  filter,
-  sortPrice,
-  sortNewest
 };
 
 module.exports = productsController;

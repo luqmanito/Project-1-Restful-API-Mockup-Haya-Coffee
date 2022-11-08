@@ -1,7 +1,6 @@
 const promosRepo = require("../repo/promos");
 
 const get = async (req, res) => {
-  // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
   try {
     const response = await promosRepo.getPromos();
     res.status(200).json({
@@ -27,7 +26,7 @@ const add = async (req, res) => {
 
 const edit = async (req, res) => {
   try {
-    const response = await promosRepo.editPromos(req.body, req.params);
+    const response = await promosRepo.editPromos(req.body, req.query);
     res.status(200).json({ result: response });
   } catch (err) {
     res.status(500).json({ msg: "internal server error" });
@@ -44,7 +43,6 @@ const drop = async (req, res) => {
 };
 
 const search = async (req, res) => {
-  // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
   try {
     const response = await promosRepo.searchPromos(req.query);
     res.status(200).json({
@@ -58,7 +56,6 @@ const search = async (req, res) => {
 };
 
 const sort = async (req, res) => {
-  // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
   try {
     const response = await promosRepo.sortPromos();
     res.status(200).json({
@@ -72,7 +69,6 @@ const sort = async (req, res) => {
 };
 
 const filter = async (req, res) => {
-    // pada subrouter tdk perlu didefinisikan pathnya, ckup "/", krn pd mainrouter sudah didefinisikan
     try {
       const response = await promosRepo.filterPromos();
       res.status(200).json({
