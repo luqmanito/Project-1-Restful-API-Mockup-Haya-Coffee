@@ -7,7 +7,7 @@
     "node": "16.x"
   },
   "scripts": {
-    "start": "node index",
+    "start": "index.js",
     "dev": "nodemon index"
   },
   "keywords": [],
