@@ -2,18 +2,13 @@ const express = require("express");
 const multer = require("multer");
 
 const productsRouter = express.Router();
-const {
-  get,
-  add,
-  edit,
-  drop,
-  
-} = require("../controllers/products");
+const { get, add, edit, drop } = require("../controllers/products");
 
 const isLogin = require("../middleware/isLogin");
 const imgUpload = require("../middleware/upload");
 const validate = require("../middleware/validate");
-const isAllowed = require("../middleware/allowedRole")
+const isAllowed = require("../middleware/allowedRole");
+
 
 function uploadFile(req, res, next) {
   const upload = imgUpload.single("imageUrl");
@@ -41,41 +36,24 @@ function uploadFile(req, res, next) {
   });
 }
 
-
-
 productsRouter.get("/all", get);
 productsRouter.post(
   "/add",
-  isLogin(),
+  isLogin.isLogins,
   isAllowed("admin"),
   imgUpload.single("imageUrl"),
-  // validate.body("name", "category", "imageUrl", "price", "quantity", "sold"),
   add
 );
 
 productsRouter.patch(
-  "/modify/:id", 
-  isLogin(),
+  "/modify/:id",
+  isLogin.isLogins,
   isAllowed("admin"),
   uploadFile,
-  // validate.body("name", "category", "imageUrl", "price", "quantity", "sold"),
   edit
-  );
-
-// productsRouter.patch(
-//   "/:id",
-//   isLogin(),
-//   allowedRoles("Admin"),
-//   uploads,
-//   // validate.patchBody(...allowed.body),
-//   update
-// );
+);
 
 
 productsRouter.delete("/del/:id", drop);
 
-
 module.exports = productsRouter;
-
-
-

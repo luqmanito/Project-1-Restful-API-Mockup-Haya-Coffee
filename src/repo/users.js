@@ -63,11 +63,19 @@ const addUsers = (body) => {
 
 const editUsers = (body, queryParams) => {
   return new Promise((resolve, reject) => {
-    const query = "update users set address = $1, name = $2, mobile_number = $3, email = $4, gender = $5, birth_date = $6, firstname = $7, lastname = $8  where id = $9";
-
+    let query = "update users set ";
+    const values = [];
+    Object.keys(body).forEach((key, idx, array) => {
+      if (idx === array.length - 1) {
+        query += `${key} = $${idx + 1} where id = $${idx + 2}`;
+        values.push(body[key], queryParams.id);
+        return;
+      }
+      query += `${key} = $${idx + 1}, `;
+      values.push(body[key]);
+    });
     postgreDb
-      .query(query, [body.address, body.name, body.mobile_number, body.email, body.gender, body.birth_date, body.firstname, body.lastname, queryParams.id])
-      
+      .query(query, values)
       .then((response) => {
         console.log(query);
         resolve(response);
@@ -173,6 +181,49 @@ const editPassUsers = (body) => {
   });
 };
 
+const insertWhitelistToken = (token) => {
+  return new Promise((resolve, reject) => {
+    const query = "insert into whitelist_token (token) values ($1) ";
+    postgreDb.query(query, [token], (error, result) => {
+      if (error) {
+        console.log(error);
+        return reject(error);
+      }
+      resolve(result);
+    });
+  });
+};
+
+const deleteWhitelistToken = (token) => {
+  return new Promise((resolve, reject) => {
+    const query = "delete from whitelist_token where token = $1";
+    postgreDb.query(query, [token], (error, result) => {
+      if (error) {
+        console.log(query);
+        console.log(error);
+        return reject(error);
+      }
+      console.log(query);
+      resolve(result);
+    });
+  });
+};
+
+const checkWhitelistToken = (token) => {
+  return new Promise((resolve, reject) => {
+    const query = "select * from whitelist_token where token = $1";
+    postgreDb.query(query, [token], (error, result) => {
+      if (error) {
+        console.log(error);
+        return reject(error);
+      }
+      resolve(result);
+    });
+  });
+};
+
+
+
 const usersRepo = {
   getUsers,
   addUsers,
@@ -182,7 +233,10 @@ const usersRepo = {
   sortUsers,
   filterUsers,
   editPassUsers,
-  getUsersId
+  getUsersId,
+  insertWhitelistToken,
+  deleteWhitelistToken,
+  checkWhitelistToken
 };
 
 module.exports = usersRepo;

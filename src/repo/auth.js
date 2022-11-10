@@ -2,6 +2,8 @@ const postgreDb = require("../config/postgre");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { token } = require("morgan");
+const users = require("../repo/users");
+const response = require("../helpers/response")
 
 // otentikasi
 const login = (body) => {
@@ -36,37 +38,64 @@ const login = (body) => {
               err: new Error("Email or password is wrong"),
               statusCode: 401,
             });
-            // proses login jika cocok, create jwt => return jwt to user
-            const payload = {
-                user_id: response.rows[0].id,
-                name: response.rows[0].name,
-                email,
-                role : response.rows[0].role
-            }
-            jwt.sign(payload, process.env.secret_key,{
-                expiresIn: "15m",
-                issuer: process.env.issuer,
-            }, (err, token)=> {
-                if (err) {
-                    console.error(err);
-                    return reject({err})
-                }
-                return resolve({token, 
-                  name: payload.name, 
-                  id: payload.user_id,
-                  role: payload.role
-                
-                })
-            })
+          // proses login jika cocok, create jwt => return jwt to user
+          const payload = {
+            user_id: response.rows[0].id,
+            name: response.rows[0].name,
+            email,
+            role: response.rows[0].role,
+          };
+          const token = jwt.sign(
+            payload,
+            process.env.secret_key,
+            {
+              expiresIn: "15m",
+              issuer: process.env.issuer,
+            },        
+              // users.insertWhitelistToken(token)
+            (err, token) => {
+              if (err) {
+                console.error(err);
+                return reject({ err });
+              }
+              return resolve(
+                { 
+                token,
+                name: payload.name,
+                id: payload.user_id,
+                role: payload.role,
+              },
+              users.insertWhitelistToken(token)
+              );
+            }, 
+          );
+          
         });
       }
     );
   });
 };
 
+const logout = async (req, res) => {
+  try {
+    const token = req.header("x-access-token");
+    console.log(token);
+    users.deleteWhitelistToken(token);
+    response(res, { status: 200, message: "Logout success" });
+  } catch (error) {
+    console.log(error);
+    return response(res, {
+      error,
+      status: 500,
+      message: "Internal server error",
+    });
+  }
+}
+
 
 const authRepo = {
-    login
-  };
-  
-  module.exports = authRepo;
+  login,
+  logout
+};
+
+module.exports = authRepo;
