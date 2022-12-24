@@ -3,7 +3,7 @@ const express = require("express");
 const postgreDb = require("./src/config/postgre");
 const mainRouter = require("./src/routes/main");
 const server = express();
-const PORT = 8060;
+const PORT = 8070;
 const morgan = require("morgan")
 const cors = require("cors");
 server.use(cors());
@@ -19,7 +19,7 @@ postgreDb
     console.log("DB is connected");
     server.use(cors(corsOptions));
 
-    server.use(express.static("./uploads"));
+    server.use(express.static("./public"));
 
     // pasang parser u/ body spy bisa create/post scr dinamis
     server.use(express.json()); //krn kita mau pk json, jd .json, kl urlencode pake .urlencode

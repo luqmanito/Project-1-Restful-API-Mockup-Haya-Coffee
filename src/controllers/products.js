@@ -4,8 +4,6 @@ const productsRepo = require("../repo/products");
 const get = async (req, res) => {
   try {
     const response = await productsRepo.getProducts(req.query);
-
-
     if (req.query.page &&  req.query.limit) {
       if (req.query.page < 2) {
         nextPages = req.originalUrl.replace(
@@ -19,8 +17,8 @@ const get = async (req, res) => {
           result: response.rows,
           per_page : req.query.limit,
           current_page : req.query.page,
-          nextPage: nextUrl,
-          // totalData: totalPage
+          nextPage: nextUrl,          
+          
         });
       }
 
@@ -47,6 +45,7 @@ const get = async (req, res) => {
           current_page : req.query.page,
           nextPage: nextUrl,
           prevPage: prevUrl,
+          totalData: "rr"
         });
       }
     }
@@ -79,11 +78,11 @@ const edit = async (req, res) => {
   try {
     const response = await productsRepo.editProducts(
       req.body,
-      req.params,
+      req.query,
       req.file
     );
     res.status(200).json({
-      msg: `Data with ID number ${req.params.id} has been edited`,
+      msg: `Data with ID number ${req.query.id} has been edited`,
     });
   } catch (err) {
     console.log(err);
@@ -102,11 +101,23 @@ const drop = async (req, res) => {
   }
 };
 
+const getById = async (req, res) => {
+  try {
+    const result = await productsRepo.getProductsId(req.query);
+    res.status(200).json({
+      result : result.rows
+    });
+  } catch (err) {
+    res.status(500).json({ msg: "Gagal mengambil data" });
+  }
+};
+
 const productsController = {
   get,
   add,
   edit,
   drop,
+  getById
 };
 
 module.exports = productsController;

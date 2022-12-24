@@ -1,7 +1,6 @@
 # Haya-Coffee Backend Description
 
-Haya-Coffee is a simple service website, for food and beverage, user can simply register, login.
-
+Haya-Coffee is a simple service website, for food and beverage, user can simply register, login
 [![dotenv](https://img.shields.io/badge/dotenv-16.0.3-blue)](https://www.npmjs.com/package/dotenv)
 [![express](https://img.shields.io/badge/express-4.18.1-blue)](https://www.npmjs.com/package/express)
 [![bcrypt](https://img.shields.io/badge/bcrypt-5.0.1-blue)](https://www.npmjs.com/package/bcrypt)
@@ -40,7 +39,7 @@ $ npm i
 - issuer= "your issuer"
 ```
 
-## 4. Set up .env
+## 5. Start
 ```
 npm run dev
 ```

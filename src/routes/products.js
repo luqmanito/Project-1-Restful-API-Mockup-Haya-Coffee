@@ -2,21 +2,16 @@ const express = require("express");
 const multer = require("multer");
 
 const productsRouter = express.Router();
-const {
-  get,
-  add,
-  edit,
-  drop,
-  
-} = require("../controllers/products");
+const { get, add, edit, drop, getById } = require("../controllers/products");
 
 const isLogin = require("../middleware/isLogin");
-const {diskUpload} = require("../middleware/upload");
+const imgUpload = require("../middleware/upload");
 const validate = require("../middleware/validate");
-const isAllowed = require("../middleware/allowedRole")
+const isAllowed = require("../middleware/allowedRole");
+
 
 function uploadFile(req, res, next) {
-  const upload = diskUpload.single("imageUrl");
+  const upload = imgUpload.single("imageUrl");
   upload(req, res, function (err) {
     if (err) {
       console.log("error found : ", err);
@@ -41,41 +36,25 @@ function uploadFile(req, res, next) {
   });
 }
 
-
-
 productsRouter.get("/all", get);
 productsRouter.post(
   "/add",
-  isLogin(),
-  isAllowed("admin"),
-  diskUpload.single("imageUrl"),
-  // validate.body("name", "category", "imageUrl", "price", "quantity", "sold"),
+  isLogin.isLogins,
+  isAllowed("user"),
+  imgUpload.single("imageUrl"),
   add
 );
 
 productsRouter.patch(
-  "/modify/:id", 
-  isLogin(),
-  isAllowed("admin"),
+  "/modify/",
+  isLogin.isLogins,
+  isAllowed("user"),
   uploadFile,
-  // validate.body("name", "category", "imageUrl", "price", "quantity", "sold"),
   edit
-  );
-
-// productsRouter.patch(
-//   "/:id",
-//   isLogin(),
-//   allowedRoles("Admin"),
-//   uploads,
-//   // validate.patchBody(...allowed.body),
-//   update
-// );
+);
 
 
 productsRouter.delete("/del/:id", drop);
-
+productsRouter.get("/product_detail/", getById);
 
 module.exports = productsRouter;
-
-
-
