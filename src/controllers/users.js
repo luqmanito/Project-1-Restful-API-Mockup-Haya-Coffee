@@ -44,7 +44,11 @@ const add = async (req, res) => {
 
 const edit = async (req, res) => {
   try {
-    const response = await usersRepo.editUsers(req.body, req.query);
+    const response = await usersRepo.editUsers(
+      req.body, 
+      req.query,
+      req.file
+      );
     res.status(200).json({ 
       msg : `Edit Succesfully`,
     });

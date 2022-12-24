@@ -19,7 +19,7 @@ postgreDb
     console.log("DB is connected");
     server.use(cors(corsOptions));
 
-    server.use(express.static("./uploads"));
+    server.use(express.static("./public"));
 
     // pasang parser u/ body spy bisa create/post scr dinamis
     server.use(express.json()); //krn kita mau pk json, jd .json, kl urlencode pake .urlencode

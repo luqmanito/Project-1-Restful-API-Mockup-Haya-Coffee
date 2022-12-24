@@ -15,14 +15,31 @@ const get = async (req, res) => {
 
 const add = async (req, res) => {
   try {
-    const response = await promosRepo.addPromos(req.body);
+    const response = await promosRepo.addPromos(req.body, req.file);
     res.status(201).json({
-      result: response,
+      msg: `${req.body.name} has been added to product list`,
     });
   } catch (err) {
-    res.status(500).json({ msg: `internal server error` });
+    res.status(500).json({  msg: `all fields are required`, });
   }
 };
+
+// const add = async (req, res) => {
+//   try {
+//     console.log(req.body);
+//     const response = await productsRepo.addProducts(req.body, req.file);
+//     res.status(201).json({
+//       msg: `${req.body.name} has been added to product list`,
+//     });
+//   } catch (err) {
+//     console.log(err);
+
+//     res.status(500).json({
+//       msg: `all fields are required`,
+//     });
+//   }
+// };
+
 
 const edit = async (req, res) => {
   try {

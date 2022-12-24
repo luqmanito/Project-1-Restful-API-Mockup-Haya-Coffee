@@ -49,7 +49,7 @@ const login = (body) => {
             payload,
             process.env.secret_key,
             {
-              expiresIn: "15m",
+              expiresIn: "60m",
               issuer: process.env.issuer,
             },        
               // users.insertWhitelistToken(token)
@@ -87,7 +87,7 @@ const logout = async (req, res) => {
     return response(res, {
       error,
       status: 500,
-      message: "Internal server error",
+      message: "Internals server error",
     });
   }
 }

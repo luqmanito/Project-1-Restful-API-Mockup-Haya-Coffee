@@ -26,7 +26,7 @@ const add = async (req, res) => {
 
 const edit = async (req, res) => {
   try {
-    const response = await transactionsRepo.editTransactions(req.body, req.params);
+    const response = await transactionsRepo.editTransactions(req.body, req.query);
     res.status(200).json({ 
       msg : `Edit Succesfully`, 
     });
@@ -85,6 +85,50 @@ const filter = async (req, res) => {
     }
   };
 
+  const create = async (req, res) => {
+    const user_id = req.userPayload.user_id;
+    try {
+      const response = await transactionsRepo.createTransactions(req.body, user_id);
+      res.status(201).json({
+        msg : `Transaction Created Succesfully`,
+        data : response
+      });
+    } catch (err) {
+      res.status(500).json({ msg: `internal server error` });
+    }
+  };
+
+  const getHistoryTransaction = async (req, res) => {
+    const user_id = req.userPayload.user_id;
+    try {
+      const response = await transactionsRepo.getTransactionByUserId(user_id);
+      res.status(200).json({
+        result: response.rows,
+      });
+    } catch (err) {
+      res.status(500).json({
+        msg: "internal server error",
+      });
+    }
+  };
+
+  const dropTransactions = async (req, res) => {
+    try {
+      const result = await transactionsRepo.deleteTransactions(req.query);
+      return res.status(200).json({
+        status: 200,
+        message: "Delete success",
+      });
+    } catch (error) {
+      return res.status(500).json({
+        error,
+        status: 500,
+        message: "Internal server error",
+      });
+    }
+  }
+
+
 const transactionsController = {
   get,
   add,
@@ -92,7 +136,10 @@ const transactionsController = {
   drop,
   search,
   sort,
-  filter
+  filter,
+  create,
+  getHistoryTransaction,
+  dropTransactions
 };
 
 module.exports = transactionsController;

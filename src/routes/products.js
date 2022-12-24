@@ -2,7 +2,7 @@ const express = require("express");
 const multer = require("multer");
 
 const productsRouter = express.Router();
-const { get, add, edit, drop } = require("../controllers/products");
+const { get, add, edit, drop, getById } = require("../controllers/products");
 
 const isLogin = require("../middleware/isLogin");
 const imgUpload = require("../middleware/upload");
@@ -40,20 +40,21 @@ productsRouter.get("/all", get);
 productsRouter.post(
   "/add",
   isLogin.isLogins,
-  isAllowed("admin"),
+  isAllowed("user"),
   imgUpload.single("imageUrl"),
   add
 );
 
 productsRouter.patch(
-  "/modify/:id",
+  "/modify/",
   isLogin.isLogins,
-  isAllowed("admin"),
+  isAllowed("user"),
   uploadFile,
   edit
 );
 
 
 productsRouter.delete("/del/:id", drop);
+productsRouter.get("/product_detail/", getById);
 
 module.exports = productsRouter;

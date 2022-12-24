@@ -12,26 +12,63 @@ const getPromos= () => {
   });
 };
 
-const addPromos= (body) => {
+// const addPromos= (body) => {
+//   return new Promise((resolve, reject) => {
+//     const query =
+//       "insert into promos (name, price, description) values ($1,$2,$3)";
+//     const { name, price, description } = body;
+//     postgreDb.query(
+//       query,
+//       [name, price, description],
+//       (err, response) => {
+//         if (err) {
+//           console.log(err);
+//           return reject(err);
+//         } else {
+//           console.log(query);
+//           resolve(response);
+//         }
+//       }
+//     );
+//   });
+// };
+
+const addPromos = (body, file) => {
   return new Promise((resolve, reject) => {
-    const query =
-      "insert into promos (name, price, description) values ($1,$2,$3)";
-    const { name, price, description } = body;
-    postgreDb.query(
-      query,
-      [name, price, description],
-      (err, response) => {
-        if (err) {
-          console.log(err);
-          return reject(err);
-        } else {
+    const { name, discount, price, delivery_info, expire, description } = body;
+
+    if (file) {
+      const query =
+        "insert into promos (name, discount, price, delivery_info, expire, description, image) values ($1,$2,$3,$4,$5,$6,$7)";
+      const imageUrl = `/images/${file.filename}`;
+      postgreDb.query(
+        query,
+        [name, discount, price, delivery_info, expire, description, imageUrl],
+        (err, response) => {
+          if (err) {
+            console.log(err);
+            console.log(query);
+            return reject(err);
+          }
           console.log(query);
           resolve(response);
         }
-      }
-    );
+      );
+    } else {
+      const query =
+        "insert into promos (name, discount, price, delivery_info, expire, description) values ($1,$2,$3,$4,$5,$6)";
+      postgreDb.query(query, [name, discount, price, delivery_info, expire, description], (err, response) => {
+        if (err) {
+          console.log(err);
+          return reject(err);
+        }
+        console.log(query);
+        resolve(response);
+      });
+    }
   });
 };
+
 
 const editPromos= (body, queryParams) => {
   return new Promise((resolve, reject) => {
