@@ -73,7 +73,7 @@ const addProducts = (body, file) => {
     if (file) {
       const query =
         "insert into products (name, category, image, price, quantity, sold, description) values ($1,$2,$3,$4,$5,$6,$7)";
-      const imageUrl = `/images/${file.filename}`;
+      const imageUrl = `${file.url} `;
       postgreDb.query(
         query,
         [name, category, imageUrl, price, quantity, sold, description],
@@ -108,7 +108,7 @@ const editProducts = (body, queryParams, file) => {
     const values = [];
 
     if (file) {
-      const imageUrl = `/images/${file.filename}`;
+      const imageUrl = `${file.url} `;
       if (!name && !price && !category) {
         if (file && file.fieldname == "imageUrl") {
           query += `image = '${imageUrl}' where id = $1`;
