@@ -1,7 +1,7 @@
 const express = require("express");
 const isAllowed = require("../middleware/allowedRole");
 const cloudinaryUploader = require("../middleware/cloudinary");
-const {diskUpload, memoryUpload} = require("../middleware/upload");
+const { memoryUpload} = require("../middleware/upload");
 const isLogin = require("../middleware/isLogin");
 const promosRouter = express.Router();
 const {

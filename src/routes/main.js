@@ -7,7 +7,6 @@ const usersRouter = require("./users");
 const authRouter = require("./auth");
 // const imgUpload = require("../middleware/upload");
 const {
-  diskUpload,
   memoryUpload,
   errorHandler,
 } = require("../middleware/upload");
@@ -21,20 +20,20 @@ mainRouter.use(`${prefix}/transactions`, transactionsRouter);
 mainRouter.use(`${prefix}/users`, usersRouter);
 mainRouter.use(`${prefix}/auth`, authRouter);
 mainRouter.use(`${prefix}/forgotpassword`, authRouter);
-mainRouter.post("/", diskUpload.single("image"), (req, res) => {
-  res.json({ url: `/images/${req.file.filename}` });
-});
+// mainRouter.post("/", diskUpload.single("image"), (req, res) => {
+//   res.json({ url: `/images/${req.file.filename}` });
+// });
 
-mainRouter.post(
-  "/",
-  (req, res, next) =>
-    diskUpload.single("image")(req, res, (err) => {
-      errorHandler(err, res, next);
-    }),
-  (req, res) => {
-    res.json({ url: `/images/${req.file.filename}` });
-  }
-);
+// mainRouter.post(
+//   "/",
+//   (req, res, next) =>
+//     diskUpload.single("image")(req, res, (err) => {
+//       errorHandler(err, res, next);
+//     }),
+//   (req, res) => {
+//     res.json({ url: `/images/${req.file.filename}` });
+//   }
+// );
 
 mainRouter.post(
   "/cloud",
