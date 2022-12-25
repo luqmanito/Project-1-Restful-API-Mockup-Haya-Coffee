@@ -1,7 +1,8 @@
 const express = require("express");
 const isLogin = require("../middleware/isLogin");
 const imgUpload = require("../middleware/upload");
-
+const cloudinaryUploader = require("../middleware/cloudinary");
+const {diskUpload, memoryUpload} = require("../middleware/upload");
 function uploadFile(req, res, next) {
   const upload = imgUpload.single("imageUrl");
   upload(req, res, function (err) {
@@ -49,7 +50,8 @@ usersRouter.post("/add", add);
 usersRouter.patch(
   "/modify/", 
   isLogin.isLogins, 
-  uploadFile, 
+  memoryUpload.single("imageUrl"),
+  cloudinaryUploader,
   edit
   );
 usersRouter.delete("/del/:id", drop);

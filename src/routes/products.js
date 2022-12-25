@@ -5,13 +5,15 @@ const productsRouter = express.Router();
 const { get, add, edit, drop, getById } = require("../controllers/products");
 
 const isLogin = require("../middleware/isLogin");
-const imgUpload = require("../middleware/upload");
+// const imgUpload = require("../middleware/upload");
+const {diskUpload, memoryUpload} = require("../middleware/upload");
+const cloudinaryUploader = require("../middleware/cloudinary");
 const validate = require("../middleware/validate");
 const isAllowed = require("../middleware/allowedRole");
 
 
 function uploadFile(req, res, next) {
-  const upload = imgUpload.single("imageUrl");
+  const upload = diskUpload.single("imageUrl");
   upload(req, res, function (err) {
     if (err) {
       console.log("error found : ", err);
@@ -41,7 +43,8 @@ productsRouter.post(
   "/add",
   isLogin.isLogins,
   isAllowed("user"),
-  imgUpload.single("imageUrl"),
+  memoryUpload.single("imageUrl"),
+  cloudinaryUploader,
   add
 );
 
@@ -49,7 +52,9 @@ productsRouter.patch(
   "/modify/",
   isLogin.isLogins,
   isAllowed("user"),
-  uploadFile,
+  memoryUpload.single("imageUrl"),
+  // uploadFile,
+  cloudinaryUploader,
   edit
 );
 
