@@ -48,16 +48,16 @@ productsRouter.post(
       errorHandler(err, res, next);
     }),
   cloudinaryUploader,
-  (req, res) => {
-    console.log(req.file);
-    res.status(200).json({
-      msg: "Upload Success",
-      data: {
-        url: req.file.url,
-        secure: req.file.secure_url,
-      },
-    });
-  },
+  // (req, res) => {
+  //   console.log(req.file);
+  //   res.status(200).json({
+  //     msg: "Upload Success",
+  //     data: {
+  //       url: req.file.url,
+  //       secure: req.file.secure_url,
+  //     },
+  //   });
+  // },
   add
 );
 
