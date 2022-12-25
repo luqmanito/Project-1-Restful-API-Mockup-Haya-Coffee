@@ -6,7 +6,7 @@ const { get, add, edit, drop, getById } = require("../controllers/products");
 
 const isLogin = require("../middleware/isLogin");
 // const imgUpload = require("../middleware/upload");
-const {diskUpload, memoryUpload} = require("../middleware/upload");
+const {diskUpload, memoryUpload, errorHandler} = require("../middleware/upload");
 const cloudinaryUploader = require("../middleware/cloudinary");
 const validate = require("../middleware/validate");
 const isAllowed = require("../middleware/allowedRole");
