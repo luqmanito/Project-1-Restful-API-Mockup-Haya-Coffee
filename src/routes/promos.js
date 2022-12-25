@@ -1,6 +1,7 @@
 const express = require("express");
 const isAllowed = require("../middleware/allowedRole");
-const imgUpload = require("../middleware/upload");
+const cloudinaryUploader = require("../middleware/cloudinary");
+const {diskUpload, memoryUpload} = require("../middleware/upload");
 const isLogin = require("../middleware/isLogin");
 const promosRouter = express.Router();
 const {
@@ -19,7 +20,8 @@ promosRouter.post(
   "/add",
   isLogin.isLogins,
   isAllowed("user"),
-  imgUpload.single("imageUrl"),
+  memoryUpload.single("imageUrl"),
+  cloudinaryUploader,
   add
   );
 promosRouter.patch("/modify/", edit);
