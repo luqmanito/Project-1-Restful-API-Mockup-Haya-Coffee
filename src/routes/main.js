@@ -44,7 +44,7 @@ mainRouter.post(
     }),
   cloudinaryUploader,
   (req, res) => {
-    // console.log(req.file);
+    console.log(req.file);
     res.status(200).json({
       msg: "Upload Success",
       data: {

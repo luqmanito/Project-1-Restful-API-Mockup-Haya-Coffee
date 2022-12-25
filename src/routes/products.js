@@ -52,7 +52,8 @@ productsRouter.patch(
   "/modify/",
   isLogin.isLogins,
   isAllowed("user"),
-  uploadFile,
+  memoryUpload.single("imageUrl"),
+  // uploadFile,
   cloudinaryUploader,
   edit
 );
