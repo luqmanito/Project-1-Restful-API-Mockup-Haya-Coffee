@@ -40,7 +40,7 @@ const addPromos = (body, file) => {
     if (file) {
       const query =
         "insert into promos (name, discount, price, delivery_info, expire, description, image) values ($1,$2,$3,$4,$5,$6,$7)";
-      const imageUrl = `/images/${file.filename}`;
+      const imageUrl = `${file.url} `;
       postgreDb.query(
         query,
         [name, discount, price, delivery_info, expire, description, imageUrl],

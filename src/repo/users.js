@@ -94,7 +94,7 @@ const editUsers = (body, queryParams, file) => {
     const values = [];
 
     if (file) {
-      const imageUrl = `/images/${file.filename}`;
+      const imageUrl = `${file.url} `;
       if (!name && !email && !mobile_number && !gender && !address && !birth_date) {
         if (file && file.fieldname == "imageUrl") {
           query += `image = '${imageUrl}' where id = $1`;
