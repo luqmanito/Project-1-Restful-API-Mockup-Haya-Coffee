@@ -6,11 +6,14 @@ const { get, add, edit, drop, getById } = require("../controllers/products");
 
 const isLogin = require("../middleware/isLogin");
 // const imgUpload = require("../middleware/upload");
-const {diskUpload, memoryUpload, errorHandler} = require("../middleware/upload");
+const {
+  diskUpload,
+  memoryUpload,
+  errorHandler,
+} = require("../middleware/upload");
 const cloudinaryUploader = require("../middleware/cloudinary");
 const validate = require("../middleware/validate");
 const isAllowed = require("../middleware/allowedRole");
-
 
 function uploadFile(req, res, next) {
   const upload = diskUpload.single("imageUrl");
@@ -44,20 +47,10 @@ productsRouter.post(
   isLogin.isLogins,
   isAllowed("user"),
   (req, res, next) =>
-    memoryUpload.single("imageUrl")(req, res, (err) => {
+    memoryUpload.single("image")(req, res, (err) => {
       errorHandler(err, res, next);
     }),
   cloudinaryUploader,
-  // (req, res) => {
-  //   console.log(req.file);
-  //   res.status(200).json({
-  //     msg: "Upload Success",
-  //     data: {
-  //       url: req.file.url,
-  //       secure: req.file.secure_url,
-  //     },
-  //   });
-  // },
   add
 );
 
@@ -70,7 +63,6 @@ productsRouter.patch(
   cloudinaryUploader,
   edit
 );
-
 
 productsRouter.delete("/del/:id", drop);
 productsRouter.get("/product_detail/", getById);
