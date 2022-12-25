@@ -96,12 +96,12 @@ const editUsers = (body, queryParams, file) => {
     if (file) {
       const imageUrl = `${file.url} `;
       if (!name && !email && !mobile_number && !gender && !address && !birth_date) {
-        if (file && file.fieldname == "imageUrl") {
+        if (file && file.url == "imageUrl") {
           query += `image = '${imageUrl}' where id = $1`;
           values.push(queryParams.id);
         }
       } else {
-        if (file && file.fieldname == "imageUrl") {
+        if (file && file.url == "imageUrl") {
           query += `image = '${imageUrl}',`;
         }
       }
