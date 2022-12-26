@@ -88,7 +88,7 @@ const errorHandler = (err, res, next) => {
     }
     return res
       .status(500)
-      .json({ status: "Internal Server Error", msg: err.message });
+      .json({ status: "Internal Server Error", msg: err.message, tes : console.log(err) });
   }
   next();
 };

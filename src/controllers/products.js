@@ -60,7 +60,6 @@ const get = async (req, res) => {
 
 const add = async (req, res) => {
   try {
-    console.log(req.body);
     const response = await productsRepo.addProducts(req.body, req.file);
     res.status(201).json({
       msg: `${req.body.name} has been added to product list`,
