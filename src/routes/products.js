@@ -47,8 +47,8 @@ productsRouter.post(
   isLogin.isLogins,
   isAllowed("user"),
   (req, res, next) =>
-    memoryUpload.single("image")(req, res, (err) => {
-      errorHandler(err, res, next);
+    memoryUpload.single("imageUrl")(req, res, (err) => {
+      errorHandler(err, res, next)
     }),
   cloudinaryUploader,
   add
