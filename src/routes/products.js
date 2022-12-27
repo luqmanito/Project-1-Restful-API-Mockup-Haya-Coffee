@@ -45,7 +45,7 @@ productsRouter.get("/all", get);
 productsRouter.post(
   "/add",
   isLogin.isLogins,
-  isAllowed("user"),
+  isAllowed("admin"),
   (req, res, next) =>
     memoryUpload.single("imageUrl")(req, res, (err) => {
       errorHandler(err, res, next)
@@ -57,7 +57,7 @@ productsRouter.post(
 productsRouter.patch(
   "/modify/",
   isLogin.isLogins,
-  isAllowed("user"),
+  isAllowed("admin"),
   memoryUpload.single("imageUrl"),
   // uploadFile,
   cloudinaryUploader,
