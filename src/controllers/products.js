@@ -107,6 +107,7 @@ const getById = async (req, res) => {
       result : result.rows
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ msg: "Gagal mengambil data" });
   }
 };
