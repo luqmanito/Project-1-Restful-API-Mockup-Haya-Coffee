@@ -2,8 +2,7 @@ const postgreDb = require("../config/postgre");
 //
 const getTransactions = () => {
   return new Promise((resolve, reject) => {
-    const query =
-      "select * from transactions";
+    const query = "select * from transactions";
     postgreDb.query(query, (err, result) => {
       if (err) {
         console.error(err);
@@ -36,7 +35,7 @@ const addTransactions = (body) => {
 };
 
 const createTransactions = (body, user_id) => {
-  console.log('dari repo trans',user_id);
+  console.log("dari repo trans", user_id);
   return new Promise((resolve, reject) => {
     const query =
       "insert into transactions (user_id, products_name, address_detail, phone_number, payment_method, delivery_method, status_order, total_order, image, id_product) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) returning id";
@@ -50,7 +49,7 @@ const createTransactions = (body, user_id) => {
       status_order,
       total_order,
       image,
-      id_product   
+      id_product,
     } = body;
     postgreDb.query(
       query,
@@ -62,9 +61,9 @@ const createTransactions = (body, user_id) => {
         payment_method,
         delivery_method,
         status_order,
-        total_order, 
+        total_order,
         image,
-        id_product
+        id_product,
       ],
       (error, result) => {
         if (error) {
@@ -77,12 +76,67 @@ const createTransactions = (body, user_id) => {
   });
 };
 
+const addToCart = (body, user_id) => {
+  console.log("dari repo trans", user_id);
+  return new Promise((resolve, reject) => {
+    const query =
+      "insert into cart (user_id, products_name, size, quantity, price, delivery_method, total_order, image, id_product) values ($1,$2,$3,$4,$5,$6,$7,$8,$9) returning id";
+
+    const {
+      products_name,
+      size,
+      quantity,
+      price,
+      delivery_method,
+      total_order,
+      image,
+      id_product,
+    } = body;
+    postgreDb.query(
+      query,
+      [
+        user_id,
+        products_name,
+        size,
+        quantity,
+        price,
+        delivery_method,
+        total_order,
+        image,
+        id_product,
+      ],
+      (error, result) => {
+        if (error) {
+          console.log(error);
+          return reject(error);
+        }
+        resolve(result);
+      }
+    );
+  });
+};
 
 const getTransactionByUserId = (user_id) => {
   console.log(user_id);
   return new Promise((resolve, reject) => {
     let query =
       "select id, products_name, image, address_detail, phone_number, payment_method, delivery_method, status_order, total_order from transactions where user_id = $1";
+
+    postgreDb.query(query, [user_id], (error, result) => {
+      if (error) {
+        console.log(error);
+        return reject(error);
+      }
+      return resolve(result);
+    });
+  });
+};
+
+const getCartByUserId = (user_id) => {
+  console.log(user_id);
+  return new Promise((resolve, reject) => {
+    let query =
+      "select id, products_name, size, quantity, price, image, delivery_method, total_order, id_product from cart where user_id = $1";
 
     postgreDb.query(query, [user_id], (error, result) => {
       if (error) {
@@ -109,19 +163,6 @@ const editTransactions = (body, queryParams) => {
       });
   });
 };
-
-// const dropTransactions = (params) => {
-//   return new Promise((resolve, reject) => {
-//     const query = "delete from transactions where order_id = $1";
-//     postgreDb.query(query, [params.order_id], (err, result) => {
-//       if (err) {
-//         console.error(err);
-//         return reject(err);
-//       }
-//       resolve(result);
-//     });
-//   });
-// };
 
 const deleteTransactions = (queryParams) => {
   return new Promise((resolve, reject) => {
@@ -188,7 +229,9 @@ const transactionsRepo = {
   filterTransactions,
   createTransactions,
   getTransactionByUserId,
-  deleteTransactions
+  deleteTransactions,
+  addToCart,
+  getCartByUserId
 };
 
 module.exports = transactionsRepo;

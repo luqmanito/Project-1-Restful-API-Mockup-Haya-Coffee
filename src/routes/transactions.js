@@ -12,7 +12,9 @@ const {
   filter,
   create,
   getHistoryTransaction,
-  dropTransactions
+  dropTransactions,
+  addCartItem,
+  getCartUser
 } = require("../controllers/transactions");
 const { isLogins } = require("../middleware/isLogin");
 
@@ -31,10 +33,22 @@ transactionsRouter.post(
   create
   );
 
+  transactionsRouter.post(
+    "/addItem",
+    isLogin.isLogins,
+    addCartItem
+    );
+
   transactionsRouter.get(
     "/history", 
     isLogin.isLogins,
     getHistoryTransaction
+  );
+
+  transactionsRouter.get(
+    "/cartItems", 
+    isLogin.isLogins,
+    getCartUser
   );
 
   transactionsRouter.delete(

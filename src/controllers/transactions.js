@@ -98,10 +98,38 @@ const filter = async (req, res) => {
     }
   };
 
+  
+  const addCartItem = async (req, res) => {
+    const user_id = req.userPayload.user_id;
+    try {
+      const response = await transactionsRepo.addToCart(req.body, user_id);
+      res.status(201).json({
+        msg : `Transaction Created Succesfully`,
+        data : response
+      });
+    } catch (err) {
+      res.status(500).json({ msg: `internal server error` });
+    }
+  };
+
   const getHistoryTransaction = async (req, res) => {
     const user_id = req.userPayload.user_id;
     try {
       const response = await transactionsRepo.getTransactionByUserId(user_id);
+      res.status(200).json({
+        result: response.rows,
+      });
+    } catch (err) {
+      res.status(500).json({
+        msg: "internal server error",
+      });
+    }
+  };
+
+  const getCartUser = async (req, res) => {
+    const user_id = req.userPayload.user_id;
+    try {
+      const response = await transactionsRepo.getCartByUserId(user_id);
       res.status(200).json({
         result: response.rows,
       });
@@ -139,7 +167,9 @@ const transactionsController = {
   filter,
   create,
   getHistoryTransaction,
-  dropTransactions
+  dropTransactions,
+  getCartUser,
+  addCartItem
 };
 
 module.exports = transactionsController;
