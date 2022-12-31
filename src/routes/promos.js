@@ -19,7 +19,7 @@ promosRouter.get("/all", get);
 promosRouter.post(
   "/add",
   isLogin.isLogins,
-  isAllowed("user"),
+  isAllowed("admin"),
   memoryUpload.single("imageUrl"),
   cloudinaryUploader,
   add
