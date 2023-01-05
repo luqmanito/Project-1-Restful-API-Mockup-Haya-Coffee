@@ -68,15 +68,15 @@ const getProducts = (queryParams) => {
 
 const addProducts = (body, file) => {
   return new Promise((resolve, reject) => {
-    const { name, category, price, quantity, sold, description } = body;
+    const { name, price, description } = body;
 
     if (file) {
       const query =
-        "insert into products (name, category, image, price, quantity, sold, description) values ($1,$2,$3,$4,$5,$6,$7)";
+        "insert into products (name, image, price, description) values ($1,$2,$3,$4)";
       const imageUrl = `${file.url} `;
       postgreDb.query(
         query,
-        [name, category, imageUrl, price, quantity, sold, description],
+        [name, imageUrl, price, description],
         (err, response) => {
           if (err) {
             console.log(err);
@@ -192,7 +192,7 @@ const productsRepo = {
   addProducts,
   editProducts,
   dropProducts,
-  getProductsId
+  getProductsId,
 };
 
 module.exports = productsRepo;
