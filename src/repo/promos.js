@@ -1,7 +1,8 @@
 const postgreDb = require("../config/postgre");
-const getPromos= () => {
+const getPromos = () => {
   return new Promise((resolve, reject) => {
-    const query = "select id, discount, free_delivery, valid_until, name, price, description from promos";
+    const query =
+      "select id, discount, free_delivery, valid_until, name, price, description from promos";
     postgreDb.query(query, (err, result) => {
       if (err) {
         console.error(err);
@@ -35,15 +36,15 @@ const getPromos= () => {
 
 const addPromos = (body, file) => {
   return new Promise((resolve, reject) => {
-    const { name, discount, price, delivery_info, expire, description } = body;
+    const { name, price, description } = body;
 
     if (file) {
       const query =
-        "insert into promos (name, discount, price, delivery_info, expire, description, image) values ($1,$2,$3,$4,$5,$6,$7)";
+        "insert into promos (name, price, description, image) values ($1,$2,$3,$4)";
       const imageUrl = `${file.url} `;
       postgreDb.query(
         query,
-        [name, discount, price, delivery_info, expire, description, imageUrl],
+        [name, price, description, imageUrl],
         (err, response) => {
           if (err) {
             console.log(err);
@@ -56,23 +57,27 @@ const addPromos = (body, file) => {
       );
     } else {
       const query =
-        "insert into promos (name, discount, price, delivery_info, expire, description) values ($1,$2,$3,$4,$5,$6)";
-      postgreDb.query(query, [name, discount, price, delivery_info, expire, description], (err, response) => {
-        if (err) {
-          console.log(err);
-          return reject(err);
+        "insert into promos (name, price, description) values ($1,$2,$3)";
+      postgreDb.query(
+        query,
+        [name, price, description],
+        (err, response) => {
+          if (err) {
+            console.log(err);
+            return reject(err);
+          }
+          console.log(query);
+          resolve(response);
         }
-        console.log(query);
-        resolve(response);
-      });
+      );
     }
   });
 };
 
-
-const editPromos= (body, queryParams) => {
+const editPromos = (body, queryParams) => {
   return new Promise((resolve, reject) => {
-    const query = "update promos set name = $1, price = $2, description = $3 where id = $4";
+    const query =
+      "update promos set name = $1, price = $2, description = $3 where id = $4";
 
     postgreDb
       .query(query, [body.name, body.price, body.description, queryParams.id])
@@ -86,7 +91,7 @@ const editPromos= (body, queryParams) => {
   });
 };
 
-const dropPromos= (params) => {
+const dropPromos = (params) => {
   return new Promise((resolve, reject) => {
     const query = "delete from promos where id = $1";
     postgreDb.query(query, [params.id], (err, result) => {
@@ -99,10 +104,10 @@ const dropPromos= (params) => {
   });
 };
 
-const searchPromos= (queryParams) => {
+const searchPromos = (queryParams) => {
   return new Promise((resolve, reject) => {
     const query = `select * from promos where lower(free_delivery) like lower($1)`;
-    const values = [`%${queryParams.free_delivery}%`]
+    const values = [`%${queryParams.free_delivery}%`];
     postgreDb.query(query, values, (err, result) => {
       if (err) {
         console.error(err);
@@ -113,7 +118,7 @@ const searchPromos= (queryParams) => {
   });
 };
 
-const sortPromos= () => {
+const sortPromos = () => {
   return new Promise((resolve, reject) => {
     const query =
       "select id, discount, free_delivery, valid_until from promos order by discount asc";
@@ -127,19 +132,18 @@ const sortPromos= () => {
   });
 };
 
-const filterPromos= () => {
-    return new Promise((resolve, reject) => {
-      const query =
-      `select id, discount, free_delivery, valid_until from promos where "free_delivery" = 'YES'`;
-      postgreDb.query(query, (err, result) => {
-        if (err) {
-          console.error(err);
-          return reject(err);
-        }
-        return resolve(result);
-      });
+const filterPromos = () => {
+  return new Promise((resolve, reject) => {
+    const query = `select id, discount, free_delivery, valid_until from promos where "free_delivery" = 'YES'`;
+    postgreDb.query(query, (err, result) => {
+      if (err) {
+        console.error(err);
+        return reject(err);
+      }
+      return resolve(result);
     });
-  };
+  });
+};
 
 //
 const promosRepo = {
@@ -149,7 +153,7 @@ const promosRepo = {
   dropPromos,
   searchPromos,
   sortPromos,
-  filterPromos
+  filterPromos,
 };
 
 module.exports = promosRepo;
