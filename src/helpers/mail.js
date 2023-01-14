@@ -1,12 +1,7 @@
 const nodemailer = require("nodemailer");
-require("dotenv").config()
-const { EMAIL, PASSWORD, SECRETKEY, } = process.env;
-
-// const email = "separateways@zohomail.com";
-// const password = "KAHL42DxaTep";
-
+require("dotenv").config();
+const { EMAIL, PASSWORD, SECRETKEY } = process.env;
 var CryptoJS = require("crypto-js");
-
 
 const transporter = nodemailer.createTransport({
   service: "Zoho",
@@ -15,23 +10,16 @@ const transporter = nodemailer.createTransport({
   secure: true, //ssl
   auth: {
     user: EMAIL,
-    pass: PASSWORD
+    pass: PASSWORD,
   },
 });
 
 const sendEmail = (emailReceiver, id) => {
-
-  let _secretKey = SECRETKEY
+  let _secretKey = SECRETKEY;
 
   const encryptID = CryptoJS.AES.encrypt(`${id}`, `${_secretKey}`).toString();
-//   let bytes  = CryptoJS.AES.decrypt(encryptID, `${_secretKey}`);
-//   let originalText = bytes.toString(CryptoJS.enc.Utf8);
 
-
-const slashNone = encryptID.replace("/", 'ito');
-console.log(encryptID);
-
-
+  const slashNone = encryptID.replace("/", "ito");
 
   let body2 = `http://localhost:3000/activation/${slashNone}`;
 
