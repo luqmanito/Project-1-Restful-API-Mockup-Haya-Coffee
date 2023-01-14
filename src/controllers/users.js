@@ -51,7 +51,7 @@ const add = async (req, res) => {
   try {
     let emailReceiver = req.body.email;
     let id = result.rows[0].id;
-
+    console.log(emailReceiver, id);
     let _secretKey = SECRETKEY;
     console.log("kirim email ngga");
     const encryptID = CryptoJS.AES.encrypt(`${id}`, `${_secretKey}`).toString();
