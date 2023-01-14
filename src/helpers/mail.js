@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 
 const sendEmail = (emailReceiver, id) => {
   let _secretKey = SECRETKEY;
-
+  console.log("kirim email ngga");
   const encryptID = CryptoJS.AES.encrypt(`${id}`, `${_secretKey}`).toString();
 
   const slashNone = encryptID.replace("/", "ito");
