@@ -34,8 +34,8 @@ const sendEmail = (emailReceiver, id) => {
     subject: "Email Activation:",
     text: `This is link ${body2} to activate your account :`,
   };
-  transporter.sendMail(options, (err, info) => {
-    if (err) console.log(err);
+  transporter.sendMail(options, function(err, info) {
+    if (err) console.log(err.message);
     console.log(`Email Sent to: ${emailReceiver}`);
   });
 };

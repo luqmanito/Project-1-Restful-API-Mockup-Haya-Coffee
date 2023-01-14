@@ -49,29 +49,29 @@ const getUserById = async (req, res) => {
 const add = async (req, res) => {
   const result = await usersRepo.addUsers(req.body);
   try {
-    let emailReceiver = req.body.email;
-    let id = result.rows[0].id;
-    console.log(emailReceiver, id);
+    // let emailReceiver = req.body.email;
+    // let id = result.rows[0].id;
+    // console.log(emailReceiver, id);
     
-    let _secretKey = SECRETKEY;
-    console.log("kirim email ngga");
-    const encryptID = CryptoJS.AES.encrypt(`${id}`, `${_secretKey}`).toString();
+    // let _secretKey = SECRETKEY;
+    // console.log("kirim email ngga");
+    // const encryptID = CryptoJS.AES.encrypt(`${id}`, `${_secretKey}`).toString();
 
-    const slashNone = encryptID.replace("/", "ito");
+    // const slashNone = encryptID.replace("/", "ito");
 
-    let body2 = `http://localhost:3000/activation/${slashNone}`;
+    // let body2 = `http://localhost:3000/activation/${slashNone}`;
 
-    const options = {
-      from: `"Haya-Coffee-Shops" <${EMAIL}>`,
-      to: emailReceiver,
-      subject: "Email Activation:",
-      text: `This is link ${body2} to activate your account :`,
-    };
-    transporter.sendMail(options, (err, info) => {
-      if (err) console.log(err);
-      console.log(`Email Sent to: ${emailReceiver}`);
-      console.log(info);
-    });
+    // const options = {
+    //   from: `"Haya-Coffee-Shops" <${EMAIL}>`,
+    //   to: emailReceiver,
+    //   subject: "Email Activation:",
+    //   text: `This is link ${body2} to activate your account :`,
+    // };
+    // transporter.sendMail(options, (err, info) => {
+    //   if (err) console.log(err);
+    //   console.log(`Email Sent to: ${emailReceiver}`);
+    //   console.log(info);
+    // });
 
     res.status(200).json({
       msg: `Register Succesfully`,
