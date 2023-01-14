@@ -71,7 +71,7 @@ const transporter = nodemailer.createTransport({
     to: emailReceiver, // list of receivers
     subject: "Email Activation:", // Subject line
     text: `This is link ${body2} to activate your account :`, // plain text body
-    html: "<b>Hello New User?</b>", // html body
+    // html: "<b>Hello New User?</b>", // html body
   });
 
   console.log("Message sent: %s", info.messageId);

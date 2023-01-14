@@ -48,8 +48,8 @@ const getUserById = async (req, res) => {
 };
 
 const add = async (req, res) => {
+  const result = await usersRepo.addUsers(req.body);
   try {
-    const result = await usersRepo.addUsers(req.body);
     // let emailReceiver = req.body.email;
     // let id = result.rows[0].id;
     // console.log(emailReceiver, id);
@@ -81,12 +81,12 @@ const add = async (req, res) => {
     //   console.log(`Email Sent to: ${emailReceiver}`);
     //   console.log(info);
     // });
-
+// let statusCode = 200
     res.status(200).json({
       msg: `Register Succesfully`,
       data: req.body.email,
-    });
-    main(req.body.email, result.rows[0].id);
+    }, main(req.body.email, result.rows[0].id));
+    
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "Email or phone already exist" });
