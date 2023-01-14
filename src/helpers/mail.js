@@ -17,12 +17,17 @@ const transporter = nodemailer.createTransport({
 const sendEmail = (emailReceiver, id) => {
   let _secretKey = SECRETKEY;
   console.log("kirim email ngga");
+  console.log(emailReceiver);
+  console.log(id);
+  console.log(_secretKey);
+  console.log("dari env" + SECRETKEY);
+
   const encryptID = CryptoJS.AES.encrypt(`${id}`, `${_secretKey}`).toString();
 
   const slashNone = encryptID.replace("/", "ito");
-
+  console.log(slashNone);
   let body2 = `http://localhost:3000/activation/${slashNone}`;
-
+  console.log(body2);
   const options = {
     from: `"Haya-Coffee-Shops" <${EMAIL}>`,
     to: emailReceiver,
