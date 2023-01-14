@@ -20,7 +20,7 @@ const getUserById = async (req, res) => {
   try {
     const response = await usersRepo.getUsersId(req.query);
     res.status(200).json({
-      result: response.rows
+      result: response.rows,
     });
   } catch (err) {
     console.log(err);
@@ -30,20 +30,14 @@ const getUserById = async (req, res) => {
   }
 };
 
-
-
-
 const add = async (req, res) => {
   try {
     const result = await usersRepo.addUsers(req.body);
-    res.status(200).json({ 
-      msg : ` Register Succesfully`,
-      data : req.body.email
-      
+    sendEmail(req.body.email, result.rows[0].id);
+    res.status(200).json({
+      msg: ` Register Succesfully`,
+      data: req.body.email,
     });
-    // console.log(result.rows[0].id)
-    sendEmail(req.body.email, result.rows[0].id)
-    
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "Email or phone already exist" });
@@ -53,8 +47,8 @@ const add = async (req, res) => {
 const activate = async (req, res) => {
   try {
     const result = await usersRepo.activateUsers(req.query);
-    res.status(200).json({ 
-      msg : ` Account activated`,
+    res.status(200).json({
+      msg: ` Account activated`,
     });
   } catch (err) {
     console.log(err);
@@ -62,16 +56,11 @@ const activate = async (req, res) => {
   }
 };
 
-
 const edit = async (req, res) => {
   try {
-    const response = await usersRepo.editUsers(
-      req.body, 
-      req.query,
-      req.file
-      );
-    res.status(200).json({ 
-      msg : `Edit Succesfully`,
+    const response = await usersRepo.editUsers(req.body, req.query, req.file);
+    res.status(200).json({
+      msg: `Edit Succesfully`,
     });
   } catch (err) {
     res.status(500).json({ msg: "internal server error" });
@@ -81,8 +70,8 @@ const edit = async (req, res) => {
 const drop = async (req, res) => {
   try {
     const result = await usersRepo.dropUsers(req.params);
-    res.status(200).json({ 
-      msg : `Delete Succesfully`, 
+    res.status(200).json({
+      msg: `Delete Succesfully`,
     });
   } catch (err) {
     res.status(500).json({ msg: "Internal Server Error" });
@@ -116,32 +105,33 @@ const sort = async (req, res) => {
 };
 
 const filter = async (req, res) => {
-    try {
-      const response = await usersRepo.filterUsers();
-      res.status(200).json({
-        result: response.rows,
-      });
-    } catch (err) {
-      res.status(500).json({
-        msg: "internal server error",
-      });
-    }
-  };
+  try {
+    const response = await usersRepo.filterUsers();
+    res.status(200).json({
+      result: response.rows,
+    });
+  } catch (err) {
+    res.status(500).json({
+      msg: "internal server error",
+    });
+  }
+};
 
 const editPass = (req, res) => {
-  const {body} = req
-  usersRepo.editPassUsers(body)
-  .then((response)=> {
-    res.status(200).json({
-      msg: "Password has been updated",
-      data: null,
+  const { body } = req;
+  usersRepo
+    .editPassUsers(body)
+    .then((response) => {
+      res.status(200).json({
+        msg: "Password has been updated",
+        data: null,
+      });
     })
-  })
-  .catch((objErr) => {
-    const statusCode = objErr.statusCode || 500
-    res.status(statusCode).json({msg: objErr.err.message})
-  })
-}
+    .catch((objErr) => {
+      const statusCode = objErr.statusCode || 500;
+      res.status(statusCode).json({ msg: objErr.err.message });
+    });
+};
 
 const usersController = {
   get,
@@ -153,7 +143,7 @@ const usersController = {
   filter,
   editPass,
   getUserById,
-  activate
+  activate,
 };
 
 module.exports = usersController;
