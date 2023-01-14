@@ -35,7 +35,7 @@ const add = async (req, res) => {
     const result = await usersRepo.addUsers(req.body);
     sendEmail(req.body.email, result.rows[0].id);
     res.status(200).json({
-      msg: ` Register Succesfully`,
+      msg: `Register Succesfully`,
       data: req.body.email,
     });
   } catch (err) {
