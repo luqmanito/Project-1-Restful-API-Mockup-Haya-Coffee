@@ -11,7 +11,7 @@ const login = (body) => {
     const { email, password } = body;
     // cek apa ada email yg diinput di db
     const getPasswordByEmailQuery =
-      "select id, name, password, role from users where email = $1";
+      "select id, name, password, role, status from users where email = $1";
     const getPasswordByEmailValues = [email];
     postgreDb.query(
       getPasswordByEmailQuery,
@@ -44,6 +44,7 @@ const login = (body) => {
             name: response.rows[0].name,
             email,
             role: response.rows[0].role,
+            status: response.rows[0].status
           };
           const token = jwt.sign(
             payload,
@@ -63,7 +64,9 @@ const login = (body) => {
                 token,
                 name: payload.name,
                 id: payload.user_id,
+                status: payload.status,
                 role: payload.role,
+                
               },
               users.insertWhitelistToken(token)
               );
