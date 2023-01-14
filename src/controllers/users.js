@@ -7,6 +7,7 @@ const nodemailer = require("nodemailer");
 require("dotenv").config();
 const { EMAIL, PASSWORD, SECRETKEY } = process.env;
 var CryptoJS = require("crypto-js");
+const main = require("../helpers/mail");
 
 const transporter = nodemailer.createTransport({
   service: "Zoho",
@@ -49,36 +50,44 @@ const getUserById = async (req, res) => {
 const add = async (req, res) => {
   const result = await usersRepo.addUsers(req.body);
   try {
-    let emailReceiver = req.body.email;
-    let id = result.rows[0].id;
-    console.log(emailReceiver, id);
+    // let emailReceiver = req.body.email;
+    // let id = result.rows[0].id;
+    // console.log(emailReceiver, id);
     
-    let _secretKey = SECRETKEY;
-    console.log("kirim email ngga");
-    const encryptID = CryptoJS.AES.encrypt(`${id}`, `${_secretKey}`).toString();
+    // let _secretKey = SECRETKEY;
+    // console.log("kirim email ngga");
+    // const encryptID = CryptoJS.AES.encrypt(`${id}`, `${_secretKey}`).toString();
 
-    const slashNone = encryptID.replace("/", "ito");
+    // const slashNone = encryptID.replace("/", "ito");
 
-    let body2 = `http://localhost:3000/activation/${slashNone}`;
+    // let body2 = `http://localhost:3000/activation/${slashNone}`;
 
-    const options = {
-      from: `"Haya-Coffee-Shops" <${EMAIL}>`,
-      to: emailReceiver,
-      subject: "Email Activation:",
-      text: `This is link ${body2} to activate your account :`,
-    };
-    transporter.sendMail(options, (err, info) => {
-      if (err) console.log(err);
-      console.log(`Email Sent to: ${emailReceiver}`);
-      console.log(info);
-    });
+    // const options = {
+    //   from: `"Haya-Coffee-Shops" <${EMAIL}>`,
+    //   to: emailReceiver,
+    //   subject: "Email Activation:",
+    //   text: `This is link ${body2} to activate your account :`,
+    // };
+    
+    // let sendActivation = await transporter.sendMail({
+    //   from: `"Haya-Coffee-Shops" <${EMAIL}>`,
+    //   to: emailReceiver,
+    //   subject: "Email Activation:",
+    //   text: `This is link ${body2} to activate your account :`,
+    // })
+
+    // transporter.sendMail(options, (err, info) => {
+    //   if (err) console.log(err);
+    //   console.log(`Email Sent to: ${emailReceiver}`);
+    //   console.log(info);
+    // });
 
     res.status(200).json({
       msg: `Register Succesfully`,
       data: req.body.email,
     });
 
-    sendEmail(req.body.email, result.rows[0].id);
+    main(req.body.email, result.rows[0].id);
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "Email or phone already exist" });
