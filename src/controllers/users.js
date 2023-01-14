@@ -47,9 +47,8 @@ const getUserById = async (req, res) => {
 };
 
 const add = async (req, res) => {
+  const result = await usersRepo.addUsers(req.body);
   try {
-    const result = await usersRepo.addUsers(req.body);
-
     let emailReceiver = req.body.email;
     let id = result.rows[0].id;
 
@@ -70,6 +69,7 @@ const add = async (req, res) => {
     transporter.sendMail(options, (err, info) => {
       if (err) console.log(err);
       console.log(`Email Sent to: ${emailReceiver}`);
+      console.log(info);
     });
 
     res.status(200).json({
