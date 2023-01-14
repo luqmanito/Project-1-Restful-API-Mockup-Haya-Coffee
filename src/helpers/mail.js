@@ -51,7 +51,7 @@ async function main(emailReceiver, id) {
   // Generate test SMTP service account from ethereal.email
   // Only needed if you don't have a real mail account for testing
   // let testAccount = await nodemailer.createTestAccount();
-
+console.log('dari cont',emailReceiver, id);
   // create reusable transporter object using the default SMTP transport
 const transporter = nodemailer.createTransport({
   service: "Zoho",
