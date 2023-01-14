@@ -48,12 +48,12 @@ const getUserById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const result = await usersRepo.addUsers(req.body);
   try {
+    const result = await usersRepo.addUsers(req.body);
     // let emailReceiver = req.body.email;
     // let id = result.rows[0].id;
     // console.log(emailReceiver, id);
-    
+
     // let _secretKey = SECRETKEY;
     // console.log("kirim email ngga");
     // const encryptID = CryptoJS.AES.encrypt(`${id}`, `${_secretKey}`).toString();
@@ -68,7 +68,7 @@ const add = async (req, res) => {
     //   subject: "Email Activation:",
     //   text: `This is link ${body2} to activate your account :`,
     // };
-    
+
     // let sendActivation = await transporter.sendMail({
     //   from: `"Haya-Coffee-Shops" <${EMAIL}>`,
     //   to: emailReceiver,
@@ -82,12 +82,13 @@ const add = async (req, res) => {
     //   console.log(info);
     // });
 
-    res.status(200).json({
-      msg: `Register Succesfully`,
-      data: req.body.email,
-    });
-
-    main(req.body.email, result.rows[0].id);
+    res.status(200).json(
+      {
+        msg: `Register Succesfully`,
+        data: req.body.email,
+      },
+      main(req.body.email, result.rows[0].id)
+    );
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "Email or phone already exist" });
