@@ -52,6 +52,7 @@ const add = async (req, res) => {
     let emailReceiver = req.body.email;
     let id = result.rows[0].id;
     console.log(emailReceiver, id);
+    
     let _secretKey = SECRETKEY;
     console.log("kirim email ngga");
     const encryptID = CryptoJS.AES.encrypt(`${id}`, `${_secretKey}`).toString();
@@ -77,7 +78,7 @@ const add = async (req, res) => {
       data: req.body.email,
     });
 
-    // sendEmail(req.body.email, result.rows[0].id);
+    sendEmail(req.body.email, result.rows[0].id);
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "Email or phone already exist" });
