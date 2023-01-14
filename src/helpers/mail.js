@@ -24,7 +24,7 @@ const sendEmail = (emailReceiver, id) => {
 
   const encryptID = CryptoJS.AES.encrypt(`${id}`, `${_secretKey}`).toString();
 
-  const slashNone = encryptID.replace("/", "ito");
+  const slashNone = encryptID.replaceAll("/", "ito");
   console.log(slashNone);
   let body2 = `http://localhost:3000/activation/${slashNone}`;
   console.log(body2);
