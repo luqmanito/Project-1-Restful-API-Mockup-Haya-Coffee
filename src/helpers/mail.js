@@ -82,7 +82,7 @@ const transporter = nodemailer.createTransport({
   // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 }
 
-main().catch(console.error);
+// main().catch(console.error);
 
 // sendEmail(`luqmangrahito@gmail.com`)
 
