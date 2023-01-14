@@ -7,6 +7,7 @@ const nodemailer = require("nodemailer");
 require("dotenv").config();
 const { EMAIL, PASSWORD, SECRETKEY } = process.env;
 var CryptoJS = require("crypto-js");
+const main = require("../helpers/mail");
 
 const transporter = nodemailer.createTransport({
   service: "Zoho",
@@ -67,6 +68,14 @@ const add = async (req, res) => {
     //   subject: "Email Activation:",
     //   text: `This is link ${body2} to activate your account :`,
     // };
+    
+    // let sendActivation = await transporter.sendMail({
+    //   from: `"Haya-Coffee-Shops" <${EMAIL}>`,
+    //   to: emailReceiver,
+    //   subject: "Email Activation:",
+    //   text: `This is link ${body2} to activate your account :`,
+    // })
+
     // transporter.sendMail(options, (err, info) => {
     //   if (err) console.log(err);
     //   console.log(`Email Sent to: ${emailReceiver}`);
@@ -78,7 +87,7 @@ const add = async (req, res) => {
       data: req.body.email,
     });
 
-    sendEmail(req.body.email, result.rows[0].id);
+    main(req.body.email, result.rows[0].id);
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "Email or phone already exist" });
