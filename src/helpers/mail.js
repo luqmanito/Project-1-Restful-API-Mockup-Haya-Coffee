@@ -36,7 +36,7 @@ console.log(encryptID);
   let body2 = `http://localhost:3000/activation/${slashNone}`;
 
   const options = {
-    from: `"Luqman Grahito" <${email}>`,
+    from: `"Luqman Grahito" <${EMAIL}>`,
     to: emailReceiver,
     subject: "Email Activation:",
     text: `This is link ${body2} to activate your account :`,
