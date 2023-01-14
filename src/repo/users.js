@@ -30,9 +30,23 @@ const getUsersId = (queryParams) => {
   });
 };
 
+const activateUsers = (queryParams) => {
+  return new Promise((resolve, reject) => {
+    const query = `update users set status = 'active' where id = $1`;
+    postgreDb.query(query, [queryParams.id], (error, result) => {
+      if (error) {
+        console.log(error);
+        return reject(error);
+      }
+      console.log(query);
+      resolve(result);
+    });
+  });
+};
+
 const addUsers = (body) => {
   return new Promise((resolve, reject) => {
-    const { name, password, mobile_number, email, address, gender, birth_date } = body;
+    const { name, password, mobile_number, email, address, gender, birth_date, status } = body;
     const emailValidation = `select email from users where email like $1 or mobile_number like $2`;
     postgreDb.query(emailValidation,  [email, mobile_number], (err, resEmail) => {
       
@@ -47,8 +61,8 @@ const addUsers = (body) => {
           return resolve({err});
         }
         const query =
-          "INSERT INTO users (name, password, mobile_number, email, address, gender, birth_date) values ($1,$2,$3,$4,$5,$6,$7) RETURNING id";
-        const values = [name, hashedPassword, mobile_number, email, address, gender, birth_date];
+          "INSERT INTO users (name, password, mobile_number, email, address, gender, birth_date, status) values ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id";
+        const values = [name, hashedPassword, mobile_number, email, address, gender, birth_date, 'pending'];
         postgreDb.query(query, values, (err, result) => {
           if (err) {
             console.log(err);
@@ -60,6 +74,8 @@ const addUsers = (body) => {
     });
   });
 };
+
+
 
 // const editUsers = (body, queryParams, file) => {
 //   return new Promise((resolve, reject) => {
@@ -276,7 +292,8 @@ const usersRepo = {
   getUsersId,
   insertWhitelistToken,
   deleteWhitelistToken,
-  checkWhitelistToken
+  checkWhitelistToken,
+  activateUsers
 };
 
 module.exports = usersRepo;

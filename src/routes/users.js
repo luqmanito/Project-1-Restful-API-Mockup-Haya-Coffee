@@ -40,12 +40,15 @@ const {
   filter,
   editPass,
   getUserById,
+  activate,
 } = require("../controllers/users");
 const { isLogins } = require("../middleware/isLogin");
 
 usersRouter.get("/all", get);
 usersRouter.get("/profile/", getUserById);
 usersRouter.post("/add", add);
+
+usersRouter.patch('/activate/', activate)
 
 usersRouter.patch(
   "/modify/", 
@@ -59,5 +62,7 @@ usersRouter.get("/search", search);
 usersRouter.get("/sort", sort);
 usersRouter.get("/filter", filter);
 usersRouter.patch("/edit_pass", editPass);
+
+
 
 module.exports = usersRouter;

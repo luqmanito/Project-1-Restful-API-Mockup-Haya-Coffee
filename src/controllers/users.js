@@ -1,4 +1,6 @@
 const { response, query } = require("express");
+const sendEmail = require("../helpers/mail");
+const { activateUsers } = require("../repo/users");
 const usersRepo = require("../repo/users");
 
 const get = async (req, res) => {
@@ -29,15 +31,34 @@ const getUserById = async (req, res) => {
 };
 
 
+
+
 const add = async (req, res) => {
   try {
     const result = await usersRepo.addUsers(req.body);
     res.status(200).json({ 
-      msg : `Register Succesfully`,
+      msg : ` Register Succesfully`,
+      data : req.body.email
+      
     });
+    // console.log(result.rows[0].id)
+    sendEmail(req.body.email, result.rows[0].id)
+    
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "Email or phone already exist" });
+  }
+};
+
+const activate = async (req, res) => {
+  try {
+    const result = await usersRepo.activateUsers(req.query);
+    res.status(200).json({ 
+      msg : ` Account activated`,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: "Activation Failed" });
   }
 };
 
@@ -131,7 +152,8 @@ const usersController = {
   sort,
   filter,
   editPass,
-  getUserById
+  getUserById,
+  activate
 };
 
 module.exports = usersController;
