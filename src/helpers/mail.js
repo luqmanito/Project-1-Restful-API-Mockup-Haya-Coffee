@@ -24,7 +24,7 @@ const sendEmail = (emailReceiver, id) => {
   let body2 = `http://localhost:3000/activation/${slashNone}`;
 
   const options = {
-    from: `"Luqman Grahito" <${EMAIL}>`,
+    from: `"Haya-Coffee-Shops" <${EMAIL}>`,
     to: emailReceiver,
     subject: "Email Activation:",
     text: `This is link ${body2} to activate your account :`,
