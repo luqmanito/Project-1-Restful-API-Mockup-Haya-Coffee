@@ -1,13 +1,12 @@
 const nodemailer = require("nodemailer");
-const dotenv = require("dotenv").config();
-const emailENV = process.env.EMAIL;
-const passwordENV = process.env.PASSWORD;
-const email = "separateways@zohomail.com";
-const password = "KAHL42DxaTep";
-var SimpleCrypto = require("simple-crypto-js").default;
+require("dotenv").config()
+const { EMAIL, PASSWORD, SECRETKEY, } = process.env;
+
+// const email = "separateways@zohomail.com";
+// const password = "KAHL42DxaTep";
+
 var CryptoJS = require("crypto-js");
 
-console.log(emailENV, passwordENV);
 
 const transporter = nodemailer.createTransport({
   service: "Zoho",
@@ -15,14 +14,14 @@ const transporter = nodemailer.createTransport({
   port: 465,
   secure: true, //ssl
   auth: {
-    user: email,
-    pass: password,
+    user: EMAIL,
+    pass: PASSWORD
   },
 });
 
 const sendEmail = (emailReceiver, id) => {
 
-  let _secretKey = "bolgeo";
+  let _secretKey = SECRETKEY
 
   const encryptID = CryptoJS.AES.encrypt(`${id}`, `${_secretKey}`).toString();
 //   let bytes  = CryptoJS.AES.decrypt(encryptID, `${_secretKey}`);
