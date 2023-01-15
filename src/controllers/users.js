@@ -8,6 +8,8 @@ require("dotenv").config();
 const { EMAIL, PASSWORD, SECRETKEY } = process.env;
 var CryptoJS = require("crypto-js");
 const main = require("../helpers/mail");
+const mail = require("../helpers/mail");
+const { mailSender } = require("../helpers/mail");
 
 const transporter = nodemailer.createTransport({
   service: "Zoho",
@@ -50,11 +52,12 @@ const getUserById = async (req, res) => {
 const add = async (req, res) => {
   try {
     const result = await usersRepo.addUsers(req.body);
+    const response = await mailSender(req.body.email, result.rows[0].id);
     res.status(200).json({
       msg: `Register Succesfully`,
       data: req.body.email,
+      response : response
     });
-    await main(req.body.email, result.rows[0].id);
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "Email or phone already exist" });
