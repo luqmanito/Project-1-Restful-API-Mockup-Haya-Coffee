@@ -17,5 +17,4 @@ const db = new Pool({
     port: DB_PORT,
   });
 
-module.exports = db // dieksport sesuai nama const db diatas
-//kl sudah balik k index.js u/ dikoneksikan
+module.exports = db 
