@@ -122,8 +122,8 @@ module.exports = {
         >
           <h2>Hi.</h2>
           <h4>This Is Your Code Verification</h4>
-          <p style="margin-bottom: 30px;">Please click link to activate the account</p>
-          <h1 style="font-size: 40px; letter-spacing: 2px; text-align:center;">${body2}</h1>
+          <p style="margin-bottom: 30px;">Please click link to activate the account</p>          
+          <h1 style="font-size: 40px; letter-spacing: 2px; text-align:center;"> <a href="${body2}">Activation Link</a> </h1>
      </div>
       `,
       };
