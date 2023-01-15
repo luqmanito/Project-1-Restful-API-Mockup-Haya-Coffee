@@ -108,7 +108,7 @@ module.exports = {
         `${_secretKey}`
       ).toString();
       const slashNone = encryptID.replaceAll("/", "ito");
-      let body2 = `http://localhost:3000/activation/${slashNone}`;
+      let body2 = `https://haya-coffee-frontend.vercel.app/activation/${slashNone}`;
 
       const mailOption = {
         from: `"Haya-Coffee-Shops" <${EMAIL}>`, // sender address
