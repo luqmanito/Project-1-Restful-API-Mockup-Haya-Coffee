@@ -103,15 +103,29 @@ module.exports = {
         },
       });
       let _secretKey = SECRETKEY;
-      const encryptID = CryptoJS.AES.encrypt(`${id}`, `${_secretKey}`).toString()
+      const encryptID = CryptoJS.AES.encrypt(
+        `${id}`,
+        `${_secretKey}`
+      ).toString();
       const slashNone = encryptID.replaceAll("/", "ito");
-      let body2 = `http://localhost:3000/activation/${slashNone}`
+      let body2 = `http://localhost:3000/activation/${slashNone}`;
 
       const mailOption = {
         from: `"Haya-Coffee-Shops" <${EMAIL}>`, // sender address
         to: emailReceiver, // list of receivers
         subject: "Email Activation:", // Subject line
         text: `This is link ${body2} to activate your account :`, // plain text body
+        html: `
+        <div
+          class="container"
+          style="max-width: 90%; margin: auto; padding-top: 20px"
+        >
+          <h2>Hi.</h2>
+          <h4>This Is Your Code Verification</h4>
+          <p style="margin-bottom: 30px;">Please click link to activate the account</p>
+          <h1 style="font-size: 40px; letter-spacing: 2px; text-align:center;">${body2}</h1>
+     </div>
+      `,
       };
 
       transporter.sendMail(mailOption, (err, info) => {
