@@ -54,7 +54,7 @@ const add = async (req, res) => {
       msg: `Register Succesfully`,
       data: req.body.email,
     });
-    main(req.body.email, result.rows[0].id);
+    await main(req.body.email, result.rows[0].id);
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "Email or phone already exist" });
