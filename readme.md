@@ -23,18 +23,6 @@ This is the backend for an online food and drink ordering platform. The platform
 - Order and payment processing
 
 
-## Installation
-
-Install my-project with npm
-
-```bash
-Clone the repository: git clone https://github.com/luqmanito/Project-1-Restful-API-Mockup-Haya-Coffee.git
-Install dependencies: npm install
-Set up a PostgreSQL database and update the connection details in config/db.js
-Start the server: npm start or npm run dev if you want to run on development side
-The backend will be running on your desired localhost 
-```
-    
 ## Environment Variables
 
 #### To run this project, you will need to add the following environment variables to your .env file
@@ -66,6 +54,34 @@ The backend will be running on your desired localhost
 `cloudy_apikey= 'your cloudy apikey'`
 
 `cloudy_apisecret='your cloudy api secret'`
+## Installation
+
+Clone the project
+
+```bash
+  git clone https://github.com/luqmanito/Project-1-Restful-API-Mockup-Haya-Coffee.git
+```
+
+Go to the project directory
+
+```bash
+  cd project2
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+Set up a PostgreSQL database and update the connection details in config/db.js
+
+Start the server: npm start or npm run dev if you want to run on development side
+
+```bash
+  npm run start
+```
+The backend will be running on your desired localhost, by default it's in http://localhost:3000
+
 ## API Reference
 
 #### ENDPOINT public user
