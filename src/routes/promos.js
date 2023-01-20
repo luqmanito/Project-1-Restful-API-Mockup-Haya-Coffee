@@ -12,6 +12,7 @@ const {
   search,
   sort,
   filter,
+  mainCost,
 } = require("../controllers/promos");
 const { isLogins } = require("../middleware/isLogin");
 
@@ -29,6 +30,7 @@ promosRouter.delete("/del/:id", drop);
 promosRouter.get("/search", search);
 promosRouter.get("/sort", sort);
 promosRouter.get("/filter", filter);
+promosRouter.get("/cost", mainCost);
 
 
 

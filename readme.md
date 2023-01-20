@@ -1,78 +1,121 @@
-# Haya-Coffee Backend Description
 
-Haya-Coffee is a simple service website, for food and beverage, user can simply register, login
-[![dotenv](https://img.shields.io/badge/dotenv-16.0.3-blue)](https://www.npmjs.com/package/dotenv)
-[![express](https://img.shields.io/badge/express-4.18.1-blue)](https://www.npmjs.com/package/express)
-[![bcrypt](https://img.shields.io/badge/bcrypt-5.0.1-blue)](https://www.npmjs.com/package/bcrypt)
-[![jsonwebtoken](https://img.shields.io/badge/jsonwebtoken-8.5.1-blue)](https://www.npmjs.com/package/jsonwebtoken)
-[![multer](https://img.shields.io/badge/multer-1.4.4-blue)](https://www.npmjs.com/package/multer)
-[![morgan](https://img.shields.io/badge/morgan-1.10.0-blue)](https://www.npmjs.com/package/morganr)
-[![postgreSQL](https://img.shields.io/badge/pg-8.8.0-blue)](https://www.npmjs.com/package/morganr)
-
-# How to Install ?
-
-## 1. Clone this repository
-
-Clone this repository by run the following code:
-
-```
-$ git clone https://github.com/luqmanito/Project-1-Restful-API-Mockup-Haya-Coffee.git
-```
-
-## 2. Go to directory
-
-```
-$ cd Haya-Coffee
-```
-
-## 3. Install dependency packages
-
-Install dependency packages by run the following code inside project folder:
-
-```
-$ npm i
-```
-## 4. Set up .env
-```
-- local_port= "your local port"
-- secret_key=  "your secret key"
-- issuer= "your issuer"
-```
-
-## 5. Start
-```
-npm run dev
-```
+![Logo](https://res.cloudinary.com/dwxujoxc7/image/upload/v1674098385/project2/center.-removebg-preview_dxnbc2.png)
 
 
-## Application Navigation
+# Backend Haya Coffee
 
-- `index.js` - The entry point to our application. This file defines our express server and connects it to posgreSQL
-- `config/` - This folder contains configuration for passport as well as a central location for configuration/environment variables.
-- `routes/` - This folder contains the route definitions for our API.
-- `repo/` - This folder contains the schema definitions for our sql models.
-- `controller/` - This folder contains the schema definitions for unctions that separate out the code to route requests from the code that actually processes requests.
-- `middleware/` - This folder contains the schema definitions for middleware.
-- `public/` - This folder contains uploaded data to our API
+This is the backend for an online food and drink ordering platform. The platform allows customers to browse and order from a menu of delicious dishes and refreshing drinks. The backend is responsible for handling all requests from the frontend and communicating with the database to retrieve and update information.
 
-## Documentation Postman
 
-[Documentation Postman](https://goo.by/CY4Dr)
+## Tech Stack
+
+**Client:** React, Redux, Bootstrap
+
+**Server:** Node.js, Express.js, PostgreSQL
+
 
 ## Features
 
-- Auth
-  - login
-- Product
-  - CRUD Product
-- Users
-  - CRUD User with Register
-- Transactions
-  - CRUD transaction
-- Promos
-  - CRUD Promos
+- Browse and order from a wide range of dishes and drinks
+- Secure user authentication and authorization
+- Admin user can add, remove, edit product
+- Customer profile page and history
+- Order and payment processing
 
 
-## Authors
+## Installation
 
-- [@luqmanito](https://github.com/luqmanito)
+Install my-project with npm
+
+```bash
+Clone the repository: git clone https://github.com/luqmanito/Project-1-Restful-API-Mockup-Haya-Coffee.git
+Install dependencies: npm install
+Set up a PostgreSQL database and update the connection details in config/db.js
+Start the server: npm start or npm run dev if you want to run on development side
+The backend will be running on your desired localhost 
+```
+    
+## Environment Variables
+
+#### To run this project, you will need to add the following environment variables to your .env file
+
+`SECRETKEY=  "your secret_key"`
+
+`issuer= "bolgeo"`
+
+`EMAIL= your smtp email`
+
+`PASSWORD = your smtp password`
+
+`PORT = your desired port`
+
+`DB PORT = your desired DB port`
+
+#### Below is config for deployed backend
+
+`DB_HOST_DEV = 'your DB link '`
+
+`DB_USER_DEV = 'your DB user'`
+
+`DB_PASS_DEV = 'your DB password'`
+
+`DB_NAME_DEV = 'your DB name'`
+
+`cloudy_name= 'your cloudy_name'`
+
+`cloudy_apikey= 'your cloudy apikey'`
+
+`cloudy_apisecret='your cloudy api secret'`
+## API Reference
+
+#### ENDPOINT public user
+
+`GET /profile/` Retrieve the profile user by ID
+  
+`GET /profile/modify` Edit the profile user
+
+####  ENDPOINT admin user
+
+  `GET /products/add` Add new menu of dishes and drinks for 
+
+  `GET /products/modify` Edit the menu of dishes and drinks
+
+  `GET /products/del/:id` Delete the menu of dishes and drinks by ID
+
+  `GET /products/product_detail/` Retrieve the spesific menu of dishes and drinks
+
+
+
+
+
+
+
+## Additional Notes
+
+- Make sure to have the latest version of Node.js and PostgreSQL installed.
+- Remember to run npm install to install the dependencies before starting the server.
+- To properly test the API endpoints, it is recommended to use a tool such as Postman.
+
+
+## Deployment
+
+You can use my deployment of this repo here :
+
+```bash
+https://backend-haya-coffee.vercel.app/
+```
+
+
+## Documentation
+
+[POSTMAN](https://documenter.getpostman.com/view/23706916/2s83zgvQf8)
+
+
+## Related
+
+Here are some related projects
+
+[Frontend Haya Coffee](https://github.com/luqmanito/my-app)
+
+[Mobile App Haya Coffee](https://github.com/luqmanito/HayaShop)
+
