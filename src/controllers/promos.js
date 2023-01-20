@@ -1,3 +1,4 @@
+const response = require("../helpers/response");
 const promosRepo = require("../repo/promos");
 
 const get = async (req, res) => {
@@ -39,6 +40,16 @@ const add = async (req, res) => {
 //     });
 //   }
 // };
+
+ const mainCost = async (req, res) => {
+  // console.log('dada');
+  try {
+    const result = await promosRepo.getCost(12);
+    res.status(200).json({ result: result.data });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 
 const edit = async (req, res) => {
@@ -105,7 +116,8 @@ const promosController = {
   drop,
   search,
   sort,
-  filter
+  filter,
+  mainCost
 };
 
 module.exports = promosController;
