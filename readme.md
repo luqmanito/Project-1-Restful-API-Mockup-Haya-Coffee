@@ -88,15 +88,15 @@ The backend will be running on your desired localhost, by default it's in http:/
 
 `GET /profile/` Retrieve the profile user by ID
   
-`GET /profile/modify` Edit the profile user
+`PATCH /profile/modify` Edit the profile user
 
 ####  ENDPOINT admin user
 
-  `GET /products/add` Add new menu of dishes and drinks for 
+  `POST /products/add` Add new menu of dishes and drinks for 
 
-  `GET /products/modify` Edit the menu of dishes and drinks
+  `PATCH /products/modify` Edit the menu of dishes and drinks
 
-  `GET /products/del/:id` Delete the menu of dishes and drinks by ID
+  `DELETE /products/del/:id` Delete the menu of dishes and drinks by ID
 
   `GET /products/product_detail/` Retrieve the spesific menu of dishes and drinks
 
